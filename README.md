@@ -2,7 +2,7 @@
 
 > **The Definitive Local-First AI Toolkit for Developers**
 >
-> 70+ curated tools across 22 categories. At least 2 options per niche.
+> 100+ curated tools across 35 categories. At least 2 options per niche.
 > One script installs everything. No cloud required (mostly).
 
 ---
@@ -64,11 +64,33 @@ graph TB
         Q_SAFE["NeMo Guardrails<br/>LlamaFirewall · Invariant"]
     end
 
-    subgraph INTEGRATIONS["Integration Layer"]
+    subgraph INTEGRATIONS["Integration Layer — 20+ tools"]
         direction LR
-        INT1["Notion · Jira"]
-        INT2["Vault · secrets-vault"]
-        INT3["homunculus"]
+        INT1["Notion · Jira · Obsidian"]
+        INT2["Slack · Discord · Email · Calendar"]
+        INT3["Stripe · Maps · n8n"]
+        INT4["Vault · secrets-vault"]
+    end
+
+    subgraph MLPIPE["AI/ML Pipeline"]
+        direction LR
+        ML1["LlamaIndex · Haystack · DSPy"]
+        ML2["vLLM · LiteLLM · Instructor · Outlines"]
+        ML3["Axolotl · Promptfoo · Distilabel"]
+    end
+
+    subgraph CLOUD["Cloud & DevOps"]
+        direction LR
+        CL1["AWS · GCP · Azure"]
+        CL2["Docker · Kubernetes"]
+        CL3["Sentry · Grafana · Prometheus"]
+    end
+
+    subgraph SELFIMPROVE["Self-Improvement (Karpathy)"]
+        direction LR
+        SI1["autoresearch · llm-council"]
+        SI2["self-evolution · ralph-loop"]
+        SI3["LLM Wiki pattern"]
     end
 
     INFRA --> MEMORY
@@ -77,8 +99,12 @@ graph TB
     TOOLS --> AGENT
     AGENT --> QUALITY
     AGENT --> INTEGRATIONS
+    AGENT --> MLPIPE
+    AGENT --> CLOUD
     MEMORY -.->|"shared pool"| AGENT
     QUALITY -.->|"feedback"| MEMORY
+    SELFIMPROVE -.->|"auto-optimize"| AGENT
+    QUALITY -.->|"eval metrics"| SELFIMPROVE
     INTEGRATIONS -.->|"secrets"| TOOLS
 ```
 
@@ -505,6 +531,164 @@ ollama pull llava                  # Vision
 ```
 
 For all other tools, see the `docs/` folder.
+
+---
+
+### 24. Self-Improvement (Karpathy-inspired)
+
+Tools and patterns for agents that improve themselves.
+
+| Tool | Install | Stars | What It Does |
+|------|---------|-------|-------------|
+| **autoresearch** | `git clone` + `uv sync` | -- | Karpathy's autonomous ML research agent. Modifies code, runs experiments, evaluates, iterates. The canonical self-improving loop. |
+| **llm-council** | `git clone` + `uv sync` + `npm install` | 16.9k | Multi-LLM council: routes query to multiple models, peer-review, chairman synthesizes. Multi-perspective deliberation. |
+| **hermes-agent-self-evolution** | `git clone` + `pip install -e .` | -- | DSPy + genetic prompt evolution for auto-optimizing Hermes skills. |
+| **ralph-loop** | Claude Code plugin | -- | Iterative loop: same prompt fed repeatedly, agent sees its own edits, improves each cycle. |
+
+#### Karpathy's LLM Wiki Pattern
+
+Not a tool but a design pattern (from [this gist](https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f)):
+Replace RAG with an **LLM-maintained wiki**. Three operations:
+- **Ingest**: LLM summarizes new sources into structured wiki pages
+- **Query**: Answer questions from compiled wiki with citations
+- **Lint**: Detect contradictions, staleness, gaps — self-reflection
+
+The pattern can be implemented with Basic Memory (Markdown files) + Cognee (auto-prune) + any LLM.
+
+---
+
+### 25. Notifications & Messaging
+
+| Tool | Install | Platform |
+|------|---------|----------|
+| **Slack MCP** | `npx @korotovsky/slack-mcp-server` | Slack (DMs, channels, threads, reactions) |
+| **Discord MCP** | `npx mcp-discord` | Discord (messages, channels, roles, moderation) |
+| **Email MCP** | `pip install mcp-email-server` | IMAP + SMTP (any email provider) |
+
+---
+
+### 26. Calendar & Scheduling
+
+| Tool | Install | What It Does |
+|------|---------|-------------|
+| **Google Calendar MCP** | `npx google-calendar-mcp` | Multi-account, create/update/delete events, free/busy queries |
+
+---
+
+### 27. Document & PDF
+
+| Tool | Install | What It Does |
+|------|---------|-------------|
+| **Markdown2PDF MCP** | `npx markdown2pdf-mcp` | Markdown to PDF with syntax highlighting, custom styling |
+| **Unstructured** | `pip install unstructured[all-docs]` | Extract content from PDFs, Word, HTML, images with OCR |
+
+---
+
+### 28. Data & Analytics
+
+| Tool | Install | What It Does |
+|------|---------|-------------|
+| **Excel MCP** | `npx @negokaz/excel-mcp-server` | Read/write MS Excel — no Excel install required |
+
+---
+
+### 29. Cloud & Infrastructure
+
+| Tool | Install | Provider |
+|------|---------|----------|
+| **AWS MCP** (official) | `uvx awslabs.core-mcp-server` | S3, Lambda, EKS, Bedrock, 20+ services |
+| **GCP MCP** (official) | See googleapis/gcloud-mcp | BigQuery, GCE, GKE, Maps |
+| **Azure MCP** (official) | See microsoft/mcp | 40+ Azure services |
+| **Docker MCP** | `npx @modelcontextprotocol/server-docker` | Container, image, volume management |
+| **Kubernetes MCP** | Go binary from containers/kubernetes-mcp-server | Native K8s API, supports OpenShift |
+
+---
+
+### 30. Monitoring & Alerting
+
+| Tool | Install | What It Monitors |
+|------|---------|-----------------|
+| **Sentry MCP** (official) | `npx @sentry/mcp-server` | Error triage, stack traces, issue lookup |
+| **Grafana MCP** (official) | Go binary from grafana/mcp-grafana | PromQL queries, dashboards, incidents |
+| **Prometheus MCP** | `pip install prometheus-mcp-server` | Metric analysis, alerting |
+
+---
+
+### 31. Design
+
+| Tool | Install | What It Does |
+|------|---------|-------------|
+| **Figma MCP** | `npx figma-context-mcp` | Read Figma designs, layout data for AI coding agents |
+
+---
+
+### 32. Knowledge Management
+
+| Tool | Install | What It Does |
+|------|---------|-------------|
+| **Obsidian MCP** | `npx obsidian-mcp-server` | Read/write/search Obsidian vault notes, tags, frontmatter |
+
+---
+
+### 33. RAG & Search Frameworks
+
+End-to-end retrieval-augmented generation — beyond simple vector search.
+
+| Tool | Install | Stars | What It Does |
+|------|---------|-------|-------------|
+| **LlamaIndex** | `pip install llama-index` | 47k | Ingest 160+ formats, chunk, index, retrieve, generate. The RAG standard. |
+| **Haystack** | `pip install haystack-ai` | 24k | Modular pipeline builder for production RAG and semantic search. |
+| **DSPy** (Stanford) | `pip install dspy` | 33k | Replaces prompt engineering with compiled, optimizable programs. |
+
+---
+
+### 34. AI/ML Pipeline
+
+Tools for fine-tuning, model serving, structured output, and prompt management.
+
+| Tool | Install | Stars | What It Does |
+|------|---------|-------|-------------|
+| **vLLM** | `pip install vllm` | 76k | High-throughput model serving. PagedAttention. The production standard. |
+| **LiteLLM** | `pip install litellm` | 42.7k | Unified proxy for 100+ LLM providers. Cost tracking, fallbacks, load balancing. |
+| **Instructor** | `pip install instructor` | 11k | Pydantic-validated structured output from any LLM. Auto-retries on schema failure. |
+| **Outlines** | `pip install outlines` | 11.8k | Guaranteed structured output via constrained decoding during generation. |
+| **Axolotl** | `pip install axolotl` | 11.7k | Config-driven fine-tuning: LoRA, QLoRA, DPO, RLHF. One YAML = one training run. |
+| **Promptfoo** | `npm i -g promptfoo` | 10.8k | CLI prompt testing, A/B eval, red-teaming. CI/CD-friendly. |
+| **Distilabel** | `pip install distilabel` | 3k | Synthetic data generation for fine-tuning datasets. |
+| **Argilla** | `pip install argilla` | 4k | Collaborative data labeling UI for RLHF, NER, classification. |
+
+---
+
+### 35. Vector Databases (MCP)
+
+| Tool | Install | What It Does |
+|------|---------|-------------|
+| **Chroma MCP** (official) | `uvx chroma-mcp` | Vector search, document storage, full-text search |
+| **Qdrant MCP** (official) | `uvx mcp-server-qdrant` | Semantic memory layer on Qdrant |
+
+---
+
+### 36. Workflow Automation
+
+| Tool | Install | What It Does |
+|------|---------|-------------|
+| **n8n MCP** | `npx n8n-mcp` | Build and manage n8n workflows from Claude |
+
+---
+
+### 37. Payments & Finance
+
+| Tool | Install | What It Does |
+|------|---------|-------------|
+| **Stripe MCP** (official) | `npx -y @stripe/mcp --api-key=KEY` | Payments, subscriptions, invoices |
+
+---
+
+### 38. Maps & Location
+
+| Tool | Install | What It Does |
+|------|---------|-------------|
+| **Google Maps MCP** | See cablate/mcp-google-map | Places, routing, geocoding (18 tools) |
 
 ---
 

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # AI Evolution Stack — Universal Installer
-# 60+ tools across 22 categories. One script installs everything.
+# 100+ tools across 35 categories. One script installs everything.
 # Works on macOS and Linux. Everything local. No cloud. Full privacy.
 
 set -e
@@ -557,6 +557,143 @@ install_hermes_ecosystem() {
 }
 
 # ============================================
+# NOTIFICATIONS & MESSAGING
+# ============================================
+
+install_notifications() {
+    log_header "Notifications & Messaging"
+    log_info "Slack MCP: npx @korotovsky/slack-mcp-server (needs Slack token)"
+    log_info "Discord MCP: npx mcp-discord (needs Discord bot token)"
+    safe_pip_install "mcp-email-server"
+    log_success "Email MCP installed. Slack/Discord available via npx."
+}
+
+# ============================================
+# CALENDAR, DOCS, DATA
+# ============================================
+
+install_productivity() {
+    log_header "Calendar, Docs & Data"
+    log_info "Google Calendar MCP: npx google-calendar-mcp (needs OAuth)"
+    log_info "Markdown2PDF MCP: npx markdown2pdf-mcp"
+    log_info "Excel MCP: npx @negokaz/excel-mcp-server"
+    safe_pip_install "unstructured[all-docs]"
+    log_success "Unstructured (doc parser) installed. Others available via npx."
+}
+
+# ============================================
+# CLOUD & DEVOPS
+# ============================================
+
+install_cloud() {
+    log_header "Cloud & Infrastructure"
+    log_info "AWS MCP (official): uvx awslabs.core-mcp-server"
+    log_info "GCP MCP (official): see googleapis/gcloud-mcp"
+    log_info "Azure MCP (official): see microsoft/mcp"
+    log_info "Docker MCP: npx @modelcontextprotocol/server-docker"
+    log_info "Kubernetes MCP: see containers/kubernetes-mcp-server"
+    log_success "Cloud MCPs available via npx/uvx (configure API keys separately)"
+}
+
+# ============================================
+# MONITORING
+# ============================================
+
+install_monitoring() {
+    log_header "Monitoring & Alerting"
+    safe_pip_install "prometheus-mcp-server"
+    log_info "Sentry MCP: npx @sentry/mcp-server (or remote: mcp.sentry.dev)"
+    log_info "Grafana MCP: see grafana/mcp-grafana"
+    log_success "Prometheus MCP installed. Sentry/Grafana available separately."
+}
+
+# ============================================
+# DESIGN & KNOWLEDGE
+# ============================================
+
+install_design_knowledge() {
+    log_header "Design & Knowledge Management"
+    log_info "Figma MCP: npx figma-context-mcp"
+    log_info "Obsidian MCP: npx obsidian-mcp-server (needs Obsidian REST API plugin)"
+    log_success "Design & knowledge tools available via npx"
+}
+
+# ============================================
+# RAG & AI/ML PIPELINE
+# ============================================
+
+install_rag() {
+    log_header "RAG & Search Frameworks"
+    safe_pip_install "llama-index"
+    safe_pip_install "haystack-ai"
+    safe_pip_install "dspy"
+    log_success "LlamaIndex + Haystack + DSPy installed"
+}
+
+install_ml_pipeline() {
+    log_header "AI/ML Pipeline"
+    safe_pip_install "litellm"
+    safe_pip_install "instructor"
+    safe_pip_install "outlines"
+    safe_npm_install "promptfoo"
+    log_info "vLLM: pip install vllm (requires NVIDIA GPU)"
+    log_info "Axolotl: pip install axolotl (requires GPU for training)"
+    log_info "Distilabel: pip install distilabel"
+    log_info "Argilla: pip install argilla"
+    log_success "LiteLLM + Instructor + Outlines + Promptfoo installed"
+}
+
+# ============================================
+# VECTOR DATABASES
+# ============================================
+
+install_vector_dbs() {
+    log_header "Vector Databases (MCP)"
+    log_info "Chroma MCP: uvx chroma-mcp"
+    log_info "Qdrant MCP: uvx mcp-server-qdrant"
+    log_success "Vector DB MCPs available via uvx"
+}
+
+# ============================================
+# WORKFLOW, PAYMENTS, MAPS
+# ============================================
+
+install_integrations() {
+    log_header "Workflow, Payments & Maps"
+    log_info "n8n MCP: npx n8n-mcp"
+    log_info "Stripe MCP: npx -y @stripe/mcp --api-key=KEY"
+    log_info "Google Maps MCP: see cablate/mcp-google-map"
+    log_success "Integration MCPs available via npx"
+}
+
+# ============================================
+# SELF-IMPROVEMENT (KARPATHY-INSPIRED)
+# ============================================
+
+install_self_improvement() {
+    log_header "Self-Improvement (Karpathy-inspired)"
+
+    AUTORESEARCH_DIR="$HOME/.autoresearch"
+    if [ ! -d "$AUTORESEARCH_DIR" ]; then
+        log_info "Cloning autoresearch (autonomous ML experiment loop)..."
+        git clone https://github.com/karpathy/autoresearch.git "$AUTORESEARCH_DIR" 2>/dev/null || log_warn "autoresearch clone failed"
+    else
+        log_success "autoresearch already cloned"
+    fi
+
+    COUNCIL_DIR="$HOME/.llm-council"
+    if [ ! -d "$COUNCIL_DIR" ]; then
+        log_info "Cloning llm-council (multi-LLM deliberation)..."
+        git clone https://github.com/karpathy/llm-council.git "$COUNCIL_DIR" 2>/dev/null || log_warn "llm-council clone failed"
+    else
+        log_success "llm-council already cloned"
+    fi
+
+    log_info "LLM Wiki pattern: see docs/self-improvement.md"
+    log_success "Self-improvement tools ready"
+}
+
+# ============================================
 # INTERACTIVE CONFIGURATION WIZARD
 # ============================================
 
@@ -826,6 +963,16 @@ install_everything() {
     install_guardrails
     install_observability
     install_hermes_ecosystem
+    install_notifications
+    install_productivity
+    install_cloud
+    install_monitoring
+    install_design_knowledge
+    install_rag
+    install_ml_pipeline
+    install_vector_dbs
+    install_integrations
+    install_self_improvement
     setup_mcp
     verify_installation
 }
@@ -888,7 +1035,7 @@ main() {
     echo ""
     echo -e "${CYAN}${BOLD}  AI Evolution Stack${NC}"
     echo -e "  The Definitive Local-First AI Toolkit"
-    echo -e "  60+ tools. 22 categories. One script."
+    echo -e "  100+ tools. 35 categories. One script."
     echo ""
 
     # Handle CLI flags
@@ -904,6 +1051,10 @@ main() {
         --capabilities)     check_dependencies; install_capabilities; exit 0 ;;
         --orchestration)    check_dependencies; install_orchestration; exit 0 ;;
         --observability)    check_dependencies; install_observability; install_evaluation; install_guardrails; exit 0 ;;
+        --rag)              check_dependencies; install_rag; install_ml_pipeline; exit 0 ;;
+        --cloud)            check_dependencies; install_cloud; install_monitoring; exit 0 ;;
+        --selfimprove)      check_dependencies; install_self_improvement; exit 0 ;;
+        --notifications)    check_dependencies; install_notifications; exit 0 ;;
         --configure)        configure_secrets; exit 0 ;;
         --mcp)              setup_mcp; exit 0 ;;
         --verify|-v)        verify_installation; exit 0 ;;
