@@ -37,10 +37,10 @@ graph TB
         M_ADV["Mem0 · Letta · Graphiti<br/>Cognee · LangMem · MemOS"]
     end
 
-    subgraph CONTEXT["Context Layer — 5 tools"]
+    subgraph CONTEXT["Context Layer — 7 tools"]
         direction LR
-        CTX1["Repomix · mex<br/>Claude Context"]
-        CTX2["mcp-ragex<br/>Context7"]
+        CTX1["Graphify (71.5x)<br/>code-review-graph (49x)"]
+        CTX2["Repomix · mex<br/>mcp-ragex · Context7"]
     end
 
     subgraph TOOLS["Capability Layer — 15 tools"]
@@ -192,13 +192,15 @@ The installer is interactive — choose "Everything" or pick categories individu
 
 ---
 
-### 2. Project Context
+### 2. Project Context & Codebase Intelligence
 
 | Tool | Install | What It Does |
 |------|---------|-------------|
-| **Repomix** | `npm i -g repomix` | Packages entire codebase for AI — 80% token reduction |
+| **Graphify** | `pip install graphifyy && graphify install` | **71.5x token reduction.** Compiles folders into knowledge graphs (AST for 20 langs, PDFs, images, video). Query the graph, not raw files. Karpathy LLM Wiki pattern as working code. |
+| **Repomix** | `npm i -g repomix` | Packages entire codebase for AI — 70% token reduction via tree-sitter compression |
 | **mex** | `npm i -g mex-cli` | Living docs that detect drift from code |
 | **Claude Context** | Via plugins | Hybrid code search |
+| **code-review-graph** | `pip install code-review-graph` | 49x token reduction. SQLite-backed structural map of your codebase. |
 
 ---
 

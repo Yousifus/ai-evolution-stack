@@ -94,11 +94,18 @@ function Install-MemoryLayer {
 }
 
 # ============================================
-# PROJECT CONTEXT
+# PROJECT CONTEXT & CODEBASE INTELLIGENCE
 # ============================================
 
 function Install-ProjectContext {
-    Write-Header "Project Context"
+    Write-Header "Project Context & Codebase Intelligence"
+
+    # Graphify — 71.5x token reduction, Karpathy LLM Wiki pattern
+    Safe-PipInstall "graphifyy"
+    Write-Host "Run 'graphify install' after installation to add Claude Code skill" -ForegroundColor Cyan
+
+    # code-review-graph — 49x token reduction
+    Safe-PipInstall "code-review-graph"
 
     Safe-NpmInstall "repomix"
     Safe-NpmInstall "mex-cli"

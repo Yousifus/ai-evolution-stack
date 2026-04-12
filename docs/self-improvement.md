@@ -56,7 +56,23 @@ From [this gist](https://gist.github.com/karpathy/442a6bf555914893e9891c11519de9
 | **Query** | Answer questions from compiled wiki with citations | Agent queries its own knowledge base for past learnings |
 | **Lint** | Detect contradictions, staleness, gaps | Agent self-reflects: "what do I believe that's wrong?" |
 
-**Implementation with existing stack tools**:
+**Implementation: Graphify** (the pattern as working code)
+
+Karpathy ended his gist with "I think there is room here for an incredible new product instead of a hacky collection of scripts." [Graphify](https://github.com/safishamsi/graphify) is that product:
+
+```bash
+pip install graphifyy && graphify install
+/graphify ./raw
+```
+
+- **71.5x fewer tokens per query** vs reading raw files (tested on Karpathy's own repos)
+- AST extraction for 20 languages (deterministic, no LLM calls)
+- Reads PDFs, images, video, audio via Claude subagents + local Whisper
+- Edges tagged EXTRACTED (from source), INFERRED (model-reasoned), or AMBIGUOUS
+- Persistent across sessions — `--update` merges new content
+- Native Claude Code skill — call `/graphify` from anywhere
+
+**Alternative implementations** (more DIY):
 - **Basic Memory** for the wiki (Markdown files, git-friendly)
 - **Cognee** for the Lint step (auto-prunes stale nodes)
 - **LangMem** for procedural updates (agent rewrites its own prompts)

@@ -137,8 +137,19 @@ install_memory_layer() {
 }
 
 # ============================================
-# PROJECT CONTEXT
+# PROJECT CONTEXT & CODEBASE INTELLIGENCE
 # ============================================
+
+install_graphify() {
+    log_info "Installing Graphify (71.5x token reduction — Karpathy LLM Wiki pattern)..."
+    safe_pip_install "graphifyy"
+    log_info "Run 'graphify install' after installation to add Claude Code skill"
+}
+
+install_code_review_graph() {
+    log_info "Installing code-review-graph (49x token reduction — SQLite codebase map)..."
+    safe_pip_install "code-review-graph"
+}
 
 install_mex() {
     log_info "Installing mex (living documentation scaffold)..."
@@ -146,12 +157,14 @@ install_mex() {
 }
 
 install_repomix() {
-    log_info "Installing Repomix (codebase packaging — 80% token reduction)..."
+    log_info "Installing Repomix (codebase packaging — 70% token reduction)..."
     safe_npm_install "repomix"
 }
 
 install_project_context() {
-    log_header "Project Context"
+    log_header "Project Context & Codebase Intelligence"
+    install_graphify
+    install_code_review_graph
     install_repomix
     install_mex
 }
