@@ -2,7 +2,7 @@
 
 > **The Ultimate Local-First AI Toolkit for Developers**
 >
-> 30+ curated tools across 15 categories. At least 2 options per niche.
+> 35+ curated tools across 16 categories. At least 2 options per niche.
 > One script installs everything. No cloud required.
 
 ---
@@ -17,6 +17,7 @@
 | [MCP Integration](#mcp-integration) | Unified config for Claude Code, Cursor, LM Studio |
 | [Setup Guides](#setup-guides) | Step-by-step per tool |
 | [Troubleshooting](#troubleshooting) | Common issues and fixes |
+| [Community Finds](#community-finds) | Tools surfaced from r/LocalLLaMA + r/ClaudeAI |
 
 ---
 
@@ -25,7 +26,7 @@
 ```
 +=====================================================================+
 |                     AI EVOLUTION STACK v2                            |
-|                  30+ tools across 15 categories                     |
+|                  35+ tools across 16 categories                     |
 +=====================================================================+
 |                                                                     |
 |  MEMORY LAYER (Cross-Session, Cross-Project)                        |
@@ -33,6 +34,7 @@
 |  +-- Basic Memory ......... Human-readable Markdown knowledge graph |
 |  +-- MemPalace ............ Conversation history (Claude Code)      |
 |  +-- Hindsight ............ Knowledge graph + semantic search       |
+|  +-- MemClaw .............. Per-project isolated workspace memory   |
 |                                                                     |
 |  PROJECT CONTEXT (Per-Project)                                      |
 |  +-- Repomix .............. Full codebase packaging for AI          |
@@ -78,6 +80,7 @@
 |                                                                     |
 |  KNOWLEDGE & DOCS                                                   |
 |  +-- Context7 ............. Up-to-date library documentation        |
+|  +-- HF Skills ............ ACP skill definitions for ML tasks      |
 |                                                                     |
 |  PERSONAL EVOLUTION                                                 |
 |  +-- homunculus ........... Pattern learning, instinct evolution     |
@@ -87,10 +90,13 @@
 |  +-- LM Studio ............ GUI-based local model runner            |
 |  +-- Ollama ............... CLI-based, 166k stars, massive ecosystem |
 |  +-- LocalAI .............. Multi-modal OpenAI API drop-in          |
+|  +-- hf-agents ............ One-command local agent (HuggingFace)   |
 |                                                                     |
 |  AGENT FRAMEWORKS                                                   |
 |  +-- Hermes Agent ......... Self-improving agent (NousResearch)     |
 |  +-- crewAI ............... Multi-agent orchestration (45k stars)   |
+|  +-- claude-flow .......... Claude-native swarm orchestration       |
+|  +-- workflow-orchestration  Lightweight 8-agent task system        |
 |                                                                     |
 +=====================================================================+
 ```
@@ -145,17 +151,18 @@ The installer is interactive — choose "Everything" or pick categories individu
 
 Cross-session, cross-project memory systems that remember your work.
 
-| Feature | agentmemory | Basic Memory | MemPalace | Hindsight |
-|---------|-------------|--------------|-----------|-----------|
-| **Install** | `npm i -g @agentmemory/agentmemory` | `pip install basic-memory` | `pip install mempalace` | `pip install hindsight-server` |
-| **Works with Cursor** | Yes | Yes | No | Yes |
-| **Works with Claude Code** | Yes | Yes | Yes | Yes |
-| **Works with LM Studio** | Yes | Yes | No | Yes |
-| **Storage** | ChromaDB | Markdown files | ChromaDB | SQLite |
-| **Search** | Vector + Time | Vector + Time | Vector | Graph + Vector |
-| **MCP Tools** | 43 | 12 | 19 | 8 |
-| **Auto-Capture** | Yes | Yes | Manual | Yes |
-| **Best For** | Universal memory across all tools | Human-readable, git-friendly memory | Claude Code conversation recall | Knowledge graphs |
+| Feature | agentmemory | Basic Memory | MemPalace | Hindsight | MemClaw |
+|---------|-------------|--------------|-----------|-----------|--------|
+| **Install** | `npm i -g @agentmemory/agentmemory` | `pip install basic-memory` | `pip install mempalace` | `pip install hindsight-server` | `pip install memclaw` |
+| **Works with Cursor** | Yes | Yes | No | Yes | Yes |
+| **Works with Claude Code** | Yes | Yes | Yes | Yes | Yes |
+| **Works with LM Studio** | Yes | Yes | No | Yes | Yes |
+| **Storage** | ChromaDB | Markdown files | ChromaDB | SQLite | SQLite |
+| **Search** | Vector + Time | Vector + Time | Vector | Graph + Vector | Vector + Tasks |
+| **MCP Tools** | 43 | 12 | 19 | 8 | 6 |
+| **Auto-Capture** | Yes | Yes | Manual | Yes | Yes |
+| **Scope** | Global | Global | Global | Global | **Per-project isolated** |
+| **Best For** | Universal memory across all tools | Human-readable, git-friendly memory | Claude Code conversation recall | Knowledge graphs | Zero cross-project bleed, living project README |
 
 ### 2. Project Context
 
@@ -254,6 +261,7 @@ Per-project tools that give AI deep understanding of your codebase.
 | Tool | Install | What It Does |
 |------|---------|-------------|
 | **Context7** | Via Cursor/Claude plugins | Always up-to-date library documentation |
+| **HF Skills** | `pip install huggingface-skills` | ACP skill definitions: dataset creation, model training, evaluation, paper publishing. Compatible with Claude Code, Codex, Gemini CLI, Cursor. |
 
 ### 13. Personal Evolution
 
@@ -267,26 +275,27 @@ Per-project tools that give AI deep understanding of your codebase.
 
 ### 14. Local Inference
 
-| Feature | LM Studio | Ollama | LocalAI |
-|---------|-----------|--------|---------|
-| **Install** | Download from lmstudio.ai | `curl -fsSL https://ollama.ai/install.sh \| sh` | Docker / binary |
-| **Interface** | GUI | CLI + REST API | REST API (OpenAI-compatible) |
-| **Model Format** | GGUF | GGUF (auto-pull) | Multi-backend |
-| **Multi-Modal** | Text + Vision | Text + Vision | Text + Vision + Audio + Embeddings |
-| **GitHub Stars** | -- | 166k | 30k+ |
-| **Best For** | Beginners, visual management | Most popular, huge ecosystem | Advanced multi-modal pipelines |
+| Feature | LM Studio | Ollama | LocalAI | hf-agents |
+|---------|-----------|--------|---------|----------|
+| **Install** | Download from lmstudio.ai | `curl -fsSL https://ollama.ai/install.sh \| sh` | Docker / binary | `pip install hf-agents` |
+| **Interface** | GUI | CLI + REST API | REST API (OpenAI-compatible) | CLI, one command |
+| **Model Format** | GGUF | GGUF (auto-pull) | Multi-backend | Auto-detected via llmfit |
+| **Multi-Modal** | Text + Vision | Text + Vision | Text + Vision + Audio + Embeddings | Text + Code |
+| **GitHub Stars** | -- | 166k | 30k+ | -- |
+| **Best For** | Beginners, visual management | Most popular, huge ecosystem | Advanced multi-modal pipelines | Zero-config local agent: detects hardware, picks model, starts server automatically |
 
 ### 15. Agent Frameworks
 
-| Feature | Hermes Agent | crewAI |
-|---------|-------------|--------|
-| **Install** | `curl` install script | `pip install crewai` |
-| **What It Does** | Self-improving agent with persistent memory | Multi-agent orchestration with roles |
-| **MCP Support** | Native (client + server) | Native |
-| **Self-Improving** | Yes (learning loop) | No |
-| **Multi-Agent** | Single agent | Yes (crews of agents) |
-| **GitHub Stars** | 8.7k | 45.9k |
-| **Best For** | Personal AI assistant that learns | Orchestrating teams of specialized agents |
+| Feature | Hermes Agent | crewAI | claude-flow | workflow-orchestration |
+|---------|-------------|--------|-------------|------------------------|
+| **Install** | `curl` install script | `pip install crewai` | `npm i -g claude-flow` | `git clone` |
+| **What It Does** | Self-improving agent with persistent memory | Multi-agent orchestration with roles | Claude-native swarm: 87 MCP tools, hive-mind, peer-to-peer agent messaging | 8 specialist agents (code, test, architecture, DevOps) with auto task decomposition |
+| **MCP Support** | Native (client + server) | Native | Native (87 tools) | No |
+| **Self-Improving** | Yes (learning loop) | No | No | No |
+| **Multi-Agent** | Single agent | Yes (crews) | Yes (swarms) | Yes (8 agents) |
+| **Claude-Native** | No | No | **Yes** | Yes |
+| **GitHub Stars** | 8.7k | 45.9k | -- | -- |
+| **Best For** | Personal AI assistant that learns | Orchestrating teams of specialized agents | Maximum Claude Code integration, parallel swarms | Structured multi-step tasks without swarm overhead |
 
 ---
 
@@ -314,6 +323,7 @@ This configures all MCP servers for Claude Code, Cursor, and LM Studio.
 | basic-memory | Memory | uvx/pip |
 | hindsight | Memory | pip |
 | mempalace | Memory | pip |
+| memclaw | Memory | pip |
 | repomix | Context | npx |
 | mcp-ragex | Code Search | pip |
 | fetch | Web | npx |
@@ -330,6 +340,7 @@ This configures all MCP servers for Claude Code, Cursor, and LM Studio.
 | notion | Task Mgmt | HTTP |
 | secrets-vault | Security | pip |
 | hermes | Agent | pip |
+| claude-flow | Agent | npx |
 
 ---
 
@@ -435,7 +446,110 @@ cd my-research-crew
 # MCP servers and converts tools to LangChain format
 ```
 
+### claude-flow
+
+```bash
+# Install
+npm install -g claude-flow
+
+# Initialize in your project
+claude-flow init
+
+# Start the orchestrator
+claude-flow start
+
+# Add to Claude Code mcp.json
+# {
+#   "claude-flow": {
+#     "command": "npx",
+#     "args": ["-y", "claude-flow", "mcp"]
+#   }
+# }
+
+# Run a swarm task
+claude-flow swarm "Build a REST API with tests"
+```
+
+### hf-agents
+
+```bash
+# Install
+pip install hf-agents
+
+# Run — it detects your hardware, picks the right model, starts everything
+hf-agents run
+
+# Specify a task
+hf-agents run --task "refactor this module" --path ./src
+
+# Works with Ollama if already running
+hf-agents run --backend ollama
+```
+
 For all other tools, see the individual docs in the `docs/` folder.
+
+---
+
+## Community Finds
+
+> Tools surfaced from r/LocalLLaMA and r/ClaudeAI that earned their place in the stack.
+> Added April 2026. Install scripts coming in next update.
+
+### MemClaw — Per-Project Isolated Memory
+
+**Repo:** [Felo-Inc/memclaw](https://github.com/Felo-Inc/memclaw)
+
+While agentmemory, MemPalace, and Basic Memory are *global* stores, MemClaw creates **isolated workspaces per project** — each with its own tasks, artifacts, decisions, and a living README that auto-updates as the agent works. Context restores in ~8 seconds. Zero cross-project bleed by design. Genuinely fills a different niche from everything else in the memory layer.
+
+```bash
+pip install memclaw
+memclaw init  # initializes workspace for current project
+```
+
+### claude-flow — Claude-Native Swarm Orchestration
+
+**Repo:** [ruvnet/claude-flow](https://github.com/ruvnet/claude-flow)
+
+The community's most-referenced Claude-specific orchestration tool. Hive-mind swarm architecture, 87 MCP tools built-in, parallel agent execution, and peer-to-peer agent messaging via `SendMessage`. More opinionated than crewAI but significantly tighter Claude Code integration. Think crewAI, but built for Claude from the ground up.
+
+```bash
+npm install -g claude-flow
+claude-flow init && claude-flow start
+```
+
+### claude-code-workflow-orchestration — Lightweight 8-Agent System
+
+**Repo:** [barkain/claude-code-workflow-orchestration](https://github.com/barkain/claude-code-workflow-orchestration)
+
+A lighter alternative to claude-flow. 8 specialist agents (code cleanup, testing, architecture, DevOps, etc.) with automatic task decomposition and intelligent switching between sequential and parallel execution. No swarm overhead — good for structured, predictable multi-step tasks.
+
+```bash
+git clone https://github.com/barkain/claude-code-workflow-orchestration
+cd claude-code-workflow-orchestration
+./setup.sh
+```
+
+### hf-agents — One-Command Local Agent (HuggingFace)
+
+**Repo:** [huggingface/hf-agents](https://github.com/huggingface/hf-agents)
+
+Hit 624 upvotes on r/LocalLLaMA in March 2026 as "the one-command local agent setup." Uses `llmfit` to detect your hardware specs, recommends a model and quantization that will actually fit in VRAM, starts a local `llama.cpp` server, and launches a Pi coding agent — all in one command. Perfect extension to your local inference layer.
+
+```bash
+pip install hf-agents
+hf-agents run
+```
+
+### HuggingFace Skills — ACP ML Skill Definitions
+
+**Repo:** [huggingface/skills](https://github.com/huggingface/skills)
+
+ACP (Agent Context Protocol) skill definitions for ML tasks: dataset creation, model training, evaluation, paper publishing. Compatible with Claude Code, Codex, Gemini CLI, and Cursor. If you run AI experiments — whether at Colab or personally — having HF skills pre-wired into your agent removes the boilerplate from every ML task.
+
+```bash
+pip install huggingface-skills
+# Skills auto-register with compatible ACP agents
+```
 
 ---
 
@@ -480,8 +594,8 @@ ai-evolution-stack/
 ./scripts/update-all.sh
 
 # Or update manually
-npm update -g @agentmemory/agentmemory mex-cli repomix
-pip install --upgrade mempalace hindsight-server basic-memory crewai mcp-ragex
+npm update -g @agentmemory/agentmemory mex-cli repomix claude-flow
+pip install --upgrade mempalace hindsight-server basic-memory crewai mcp-ragex memclaw hf-agents
 ollama pull qwen2.5-coder:32b   # Updates models too
 ```
 
@@ -500,6 +614,8 @@ ollama pull qwen2.5-coder:32b   # Updates models too
 | Memory not persisting | Check ChromaDB/SQLite file permissions |
 | Windows: python3 not found | Use `python` instead of `python3` on Windows |
 | Desktop Commander hangs | Kill with `npx @wonderwhy-er/desktop-commander stop` |
+| claude-flow port conflict | Set `CLAUDE_FLOW_PORT` env var to an available port |
+| hf-agents VRAM error | Run `hf-agents run --quantize 4bit` to reduce memory usage |
 
 ---
 
