@@ -42,6 +42,11 @@ dist/
 logs/
 *.log
 
+# Environment / Secrets
+.env
+.env.local
+.env.*.local
+
 # Temporary files
 tmp/
 temp/

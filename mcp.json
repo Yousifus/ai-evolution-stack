@@ -97,6 +97,16 @@
       "command": "hermes",
       "args": ["mcp", "serve"],
       "description": "Self-improving agent — exposes messaging and conversation tools"
+    },
+    "memclaw": {
+      "command": "python",
+      "args": ["-m", "memclaw", "mcp"],
+      "description": "Per-project isolated workspace memory — zero cross-project bleed"
+    },
+    "claude-flow": {
+      "command": "npx",
+      "args": ["-y", "claude-flow", "mcp"],
+      "description": "Claude-native swarm orchestration — 87 MCP tools, hive-mind"
     }
   }
 }

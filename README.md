@@ -1,9 +1,9 @@
 # AI Evolution Stack
 
-> **The Ultimate Local-First AI Toolkit for Developers**
+> **The Definitive Local-First AI Toolkit for Developers**
 >
-> 30+ curated tools across 15 categories. At least 2 options per niche.
-> One script installs everything. No cloud required.
+> 70+ curated tools across 22 categories. At least 2 options per niche.
+> One script installs everything. No cloud required (mostly).
 
 ---
 
@@ -11,89 +11,78 @@
 
 | Section | Description |
 |---------|-------------|
-| [Stack Overview](#stack-overview) | Full architecture — what's included |
+| [Architecture](#architecture) | Full stack map — every category at a glance |
 | [Quick Install](#quick-install) | One command to get everything |
-| [Tool Catalog](#tool-catalog) | Every tool by category with comparisons |
+| [Tool Catalog](#tool-catalog) | All 22 categories with comparisons |
 | [MCP Integration](#mcp-integration) | Unified config for Claude Code, Cursor, LM Studio |
-| [Setup Guides](#setup-guides) | Step-by-step per tool |
+| [Hermes Ecosystem](#15-hermes-ecosystem) | Everything that enhances Hermes Agent |
 | [Troubleshooting](#troubleshooting) | Common issues and fixes |
 
 ---
 
-## Stack Overview
+## Architecture
 
+```mermaid
+graph TB
+    subgraph INFRA["Infrastructure Layer"]
+        direction LR
+        INF1["Ollama<br/><small>166k stars</small>"]
+        INF2["LM Studio<br/><small>GUI</small>"]
+        INF3["LocalAI<br/><small>multi-modal</small>"]
+    end
+
+    subgraph MEMORY["Memory Layer — 10 tools"]
+        direction LR
+        M_CORE["agentmemory · Basic Memory<br/>MemPalace · Hindsight"]
+        M_ADV["Mem0 · Letta · Graphiti<br/>Cognee · LangMem · MemOS"]
+    end
+
+    subgraph CONTEXT["Context Layer — 5 tools"]
+        direction LR
+        CTX1["Repomix · mex<br/>Claude Context"]
+        CTX2["mcp-ragex<br/>Context7"]
+    end
+
+    subgraph TOOLS["Capability Layer — 15 tools"]
+        direction LR
+        T_WEB["Fetch · Playwright<br/>Brave Search · Browser Use"]
+        T_SYS["Filesystem · Desktop Commander<br/>SQLite · Postgres<br/>Git · GitHub · Shell"]
+        T_MEDIA["Screenshot · mcp-vision<br/>Pipecat · E2B<br/>Open Interpreter"]
+    end
+
+    subgraph AGENT["Agent Layer — 20+ tools"]
+        direction LR
+        A_FW["Hermes · crewAI<br/>smolagents · Agno"]
+        A_HERMES["self-evolution · hermes-CCC<br/>workspace · skill-factory<br/>council · ralph-loop"]
+        A_SKILLS["Composio · LangChain Tools<br/>LangGraph · A2A · Temporal"]
+    end
+
+    subgraph QUALITY["Quality Layer — 10 tools"]
+        direction LR
+        Q_EVAL["DeepEval · AgentBench<br/>Inspect AI"]
+        Q_OBS["AgentOps · Phoenix<br/>Langfuse · LangSmith"]
+        Q_SAFE["NeMo Guardrails<br/>LlamaFirewall · Invariant"]
+    end
+
+    subgraph INTEGRATIONS["Integration Layer"]
+        direction LR
+        INT1["Notion · Jira"]
+        INT2["Vault · secrets-vault"]
+        INT3["homunculus"]
+    end
+
+    INFRA --> MEMORY
+    MEMORY --> CONTEXT
+    CONTEXT --> TOOLS
+    TOOLS --> AGENT
+    AGENT --> QUALITY
+    AGENT --> INTEGRATIONS
+    MEMORY -.->|"shared pool"| AGENT
+    QUALITY -.->|"feedback"| MEMORY
+    INTEGRATIONS -.->|"secrets"| TOOLS
 ```
-+=====================================================================+
-|                     AI EVOLUTION STACK v2                            |
-|                  30+ tools across 15 categories                     |
-+=====================================================================+
-|                                                                     |
-|  MEMORY LAYER (Cross-Session, Cross-Project)                        |
-|  +-- agentmemory .......... Universal memory, 43 MCP tools          |
-|  +-- Basic Memory ......... Human-readable Markdown knowledge graph |
-|  +-- MemPalace ............ Conversation history (Claude Code)      |
-|  +-- Hindsight ............ Knowledge graph + semantic search       |
-|                                                                     |
-|  PROJECT CONTEXT (Per-Project)                                      |
-|  +-- Repomix .............. Full codebase packaging for AI          |
-|  +-- mex .................. Living documentation scaffold           |
-|  +-- Claude Context ....... Hybrid code search                      |
-|                                                                     |
-|  CODE SEARCH & NAVIGATION                                           |
-|  +-- mcp-ragex ............ Hybrid: RAG + AST + regex search        |
-|  +-- Repomix .............. Codebase packaging (dual-use)           |
-|                                                                     |
-|  WEB & BROWSER                                                      |
-|  +-- Fetch MCP ............ URL fetching, HTML-to-Markdown          |
-|  +-- Playwright MCP ....... Full browser automation (Microsoft)     |
-|  +-- Brave Search MCP ..... Web, image, news, local search          |
-|                                                                     |
-|  FILE SYSTEM                                                        |
-|  +-- Filesystem MCP ....... Official sandboxed file access          |
-|  +-- Desktop Commander .... File ops + terminal + diff editing      |
-|                                                                     |
-|  DATABASE                                                           |
-|  +-- SQLite MCP ........... Local SQLite database access            |
-|  +-- Postgres MCP ......... PostgreSQL read access + introspection  |
-|                                                                     |
-|  GIT & GITHUB                                                       |
-|  +-- Git MCP .............. Local repo: history, diffs, branches    |
-|  +-- GitHub MCP ........... Official: PRs, issues, code search      |
-|                                                                     |
-|  TERMINAL & SHELL                                                   |
-|  +-- Desktop Commander .... Terminal control (dual-use with FS)     |
-|  +-- mcp-shell-server ..... Secure whitelisted command execution    |
-|                                                                     |
-|  IMAGE & VISION                                                     |
-|  +-- screenshot MCP ....... Screen capture + content processing     |
-|  +-- mcp-vision ........... Camera/screenshot + Ollama vision       |
-|                                                                     |
-|  TASK & PROJECT MANAGEMENT                                          |
-|  +-- Notion MCP ........... Official Notion: pages, databases       |
-|  +-- Jira MCP ............. Jira Cloud: tickets, projects, JQL      |
-|                                                                     |
-|  SECURITY & SECRETS                                                 |
-|  +-- Vault MCP ............ HashiCorp Vault integration             |
-|  +-- mcp-secrets-vault .... Local mini-vault, AI never sees keys    |
-|                                                                     |
-|  KNOWLEDGE & DOCS                                                   |
-|  +-- Context7 ............. Up-to-date library documentation        |
-|                                                                     |
-|  PERSONAL EVOLUTION                                                 |
-|  +-- homunculus ........... Pattern learning, instinct evolution     |
-|  +-- Hermes Agent ......... Self-improving agent, learns skills     |
-|                                                                     |
-|  LOCAL INFERENCE                                                    |
-|  +-- LM Studio ............ GUI-based local model runner            |
-|  +-- Ollama ............... CLI-based, 166k stars, massive ecosystem |
-|  +-- LocalAI .............. Multi-modal OpenAI API drop-in          |
-|                                                                     |
-|  AGENT FRAMEWORKS                                                   |
-|  +-- Hermes Agent ......... Self-improving agent (NousResearch)     |
-|  +-- crewAI ............... Multi-agent orchestration (45k stars)   |
-|                                                                     |
-+=====================================================================+
-```
+
+> See [docs/architecture-flow.md](docs/architecture-flow.md) for a detailed diagram of how all layers interconnect.
 
 ---
 
@@ -103,17 +92,14 @@
 
 ```bash
 git clone https://github.com/Yousifus/ai-evolution-stack.git
-cd ai-evolution-stack
-chmod +x install.sh
-./install.sh
+cd ai-evolution-stack && chmod +x install.sh && ./install.sh
 ```
 
 ### Windows (PowerShell)
 
 ```powershell
 git clone https://github.com/Yousifus/ai-evolution-stack.git
-cd ai-evolution-stack
-.\install.ps1
+cd ai-evolution-stack; .\install.ps1
 ```
 
 The installer is interactive — choose "Everything" or pick categories individually.
@@ -122,19 +108,17 @@ The installer is interactive — choose "Everything" or pick categories individu
 
 ```bash
 # macOS/Linux
-./install.sh --everything       # Install all tools
-./install.sh --core             # Memory + Context + MCP config
-./install.sh --memory           # Memory layer only
-./install.sh --web              # Web/Browser tools only
-./install.sh --database         # Database tools only
-./install.sh --agents           # Agent frameworks only
-./install.sh --inference        # Local inference (Ollama + LocalAI)
-./install.sh --verify           # Check what's installed
-
-# Windows
-.\install.ps1 -Everything
-.\install.ps1 -Core
-.\install.ps1 -Verify
+./install.sh --everything         # All 60+ tools
+./install.sh --core               # Memory + Context + Code Search
+./install.sh --memory             # All 10 memory systems
+./install.sh --web                # Web & Browser tools
+./install.sh --database           # Database MCPs
+./install.sh --agents             # Agent frameworks + orchestration
+./install.sh --hermes             # Full Hermes ecosystem
+./install.sh --inference          # Ollama + LocalAI
+./install.sh --capabilities       # Skills, code exec, voice, browser
+./install.sh --observability      # Monitoring + eval + guardrails
+./install.sh --verify             # Check what's installed
 ```
 
 ---
@@ -143,150 +127,291 @@ The installer is interactive — choose "Everything" or pick categories individu
 
 ### 1. Memory Layer
 
-Cross-session, cross-project memory systems that remember your work.
+10 memory systems — from simple key-value to temporal knowledge graphs.
 
-| Feature | agentmemory | Basic Memory | MemPalace | Hindsight |
-|---------|-------------|--------------|-----------|-----------|
-| **Install** | `npm i -g @agentmemory/agentmemory` | `pip install basic-memory` | `pip install mempalace` | `pip install hindsight-server` |
-| **Works with Cursor** | Yes | Yes | No | Yes |
-| **Works with Claude Code** | Yes | Yes | Yes | Yes |
-| **Works with LM Studio** | Yes | Yes | No | Yes |
-| **Storage** | ChromaDB | Markdown files | ChromaDB | SQLite |
-| **Search** | Vector + Time | Vector + Time | Vector | Graph + Vector |
-| **MCP Tools** | 43 | 12 | 19 | 8 |
-| **Auto-Capture** | Yes | Yes | Manual | Yes |
-| **Best For** | Universal memory across all tools | Human-readable, git-friendly memory | Claude Code conversation recall | Knowledge graphs |
+#### Core Memory
+
+| Tool | Install | Storage | Best For |
+|------|---------|---------|----------|
+| **agentmemory** | `npm i -g @agentmemory/agentmemory` | ChromaDB | Universal memory across all AI tools |
+| **Basic Memory** | `pip install basic-memory` | Markdown files | Human-readable, git-friendly memory |
+| **MemPalace** | `pip install mempalace` | ChromaDB | Claude Code conversation recall |
+| **Hindsight** | `pip install hindsight-server` | SQLite | Knowledge graph + semantic search |
+| **MemClaw** | `pip install memclaw` | SQLite | **Per-project isolated** workspaces — zero cross-project bleed |
+
+#### Advanced Memory (new)
+
+| Tool | Install | Stars | Superpower |
+|------|---------|-------|------------|
+| **Mem0** | `pip install mem0ai` | 52k | Auto-consolidation, dedup, conflict resolution. Drop-in universal memory. |
+| **Letta** (ex-MemGPT) | `pip install letta` | 22k | Self-editable memory blocks. Agent rewrites its own memory. `.af` versioned state files. |
+| **Graphiti** (Zep) | `pip install graphiti-core` | 5k | Temporal knowledge graph — facts have validity windows. "What did I know at time X?" |
+| **Cognee** | `pip install cognee` | 15k | Auto-prunes stale nodes, strengthens frequent connections. Has Claude Code MCP plugin. |
+| **LangMem** | `pip install langmem` | 3k | **Procedural memory** — agent rewrites its own system prompt from feedback. |
+| **MemOS** | `pip install memos` | -- | Multi-agent shared memory pool. 72% lower token usage. |
+
+#### Memory Decision Matrix
+
+| Need | Pick This |
+|------|-----------|
+| Drop-in, just works | **Mem0** |
+| Agent edits its own memory | **Letta** |
+| Facts that change over time | **Graphiti** |
+| Auto-consolidation | **Cognee** |
+| Agent rewrites its own prompt | **LangMem** |
+| Multi-agent shared pool | **MemOS** |
+| Human-readable files | **Basic Memory** |
+| Claude Code specific | **MemPalace** |
+| Per-project isolation | **MemClaw** |
+
+---
 
 ### 2. Project Context
 
-Per-project tools that give AI deep understanding of your codebase.
+| Tool | Install | What It Does |
+|------|---------|-------------|
+| **Repomix** | `npm i -g repomix` | Packages entire codebase for AI — 80% token reduction |
+| **mex** | `npm i -g mex-cli` | Living docs that detect drift from code |
+| **Claude Context** | Via plugins | Hybrid code search |
 
-| Feature | Repomix | mex | Claude Context |
-|---------|---------|-----|----------------|
-| **Install** | `npm i -g repomix` | `npm i -g mex-cli` | Via plugins |
-| **What It Does** | Packages entire codebase for AI consumption | Living docs that stay in sync with code | Hybrid code search |
-| **Token Reduction** | ~80% | ~60% | ~40% |
-| **Drift Detection** | No | Yes | No |
-| **MCP Server** | Yes | No | Yes |
+---
 
 ### 3. Code Search & Navigation
 
-| Feature | mcp-ragex | Repomix (dual-use) |
-|---------|-----------|-------------------|
-| **Install** | `pip install mcp-ragex` | `npm i -g repomix` |
-| **Search Modes** | RAG (vector) + AST (tree-sitter) + regex (ripgrep) | Full codebase packaging |
-| **Local Embeddings** | Yes | N/A |
-| **Multi-Language** | Yes | Yes |
+| Tool | Install | Search Modes |
+|------|---------|-------------|
+| **mcp-ragex** | `pip install mcp-ragex` | RAG (vector) + AST (tree-sitter) + regex (ripgrep) |
+| **Repomix** | `npm i -g repomix` | Full codebase packaging (dual-use) |
+
+---
 
 ### 4. Web & Browser
 
-| Feature | Fetch MCP | Playwright MCP | Brave Search MCP |
-|---------|-----------|----------------|-------------------|
-| **Install** | `npx @modelcontextprotocol/server-fetch` | `npx @playwright/mcp@latest` | `npx @brave/mcp-server` |
-| **What It Does** | Fetches URLs, converts HTML to Markdown | Full browser automation: click, fill, screenshot | Web, image, news, local search |
-| **API Key Required** | No | No | Yes (free tier) |
-| **Best For** | Reading web pages/APIs | E2E testing, form filling | Searching the internet |
+| Tool | Install | What It Does | API Key? |
+|------|---------|-------------|----------|
+| **Fetch MCP** | `npx @modelcontextprotocol/server-fetch` | Fetch URLs, HTML-to-Markdown | No |
+| **Playwright MCP** | `npx @playwright/mcp@latest` | Full browser automation (Microsoft) | No |
+| **Brave Search** | `npx @brave/mcp-server` | Web/image/news search | Yes (free) |
+| **Browser Use** | `pip install browser-use` | Agent-native Chromium control (72k stars) | No |
+
+---
 
 ### 5. File System
 
-| Feature | Filesystem MCP | Desktop Commander |
-|---------|---------------|-------------------|
-| **Install** | `npx @modelcontextprotocol/server-filesystem /path` | `npx @wonderwhy-er/desktop-commander` |
-| **What It Does** | Sandboxed read/write to allowed directories | File ops + diff editing + terminal + process mgmt |
-| **Scope** | File operations only | File + Terminal + Process (all-in-one) |
-| **Best For** | Safe, minimal file access | Power users who want everything |
+| Tool | Install | Scope |
+|------|---------|-------|
+| **Filesystem MCP** | `npx @modelcontextprotocol/server-filesystem /path` | Sandboxed file ops |
+| **Desktop Commander** | `npx @wonderwhy-er/desktop-commander` | File + terminal + process (all-in-one) |
+
+---
 
 ### 6. Database
 
-| Feature | SQLite MCP | Postgres MCP |
-|---------|-----------|--------------|
-| **Install** | `uvx mcp-server-sqlite --db-path ./db.sqlite` | `npx @modelcontextprotocol/server-postgres $CONN` |
-| **What It Does** | Full CRUD on SQLite databases | Read-only Postgres with schema introspection |
-| **Access Level** | Read + Write | Read-only (safe) |
-| **Best For** | Local databases, prototyping | Production DB exploration |
+| Tool | Install | Access |
+|------|---------|--------|
+| **SQLite MCP** | `uvx mcp-server-sqlite --db-path ./db.sqlite` | Read + Write |
+| **Postgres MCP** | `npx @modelcontextprotocol/server-postgres $CONN` | Read-only (safe for prod) |
+
+---
 
 ### 7. Git & GitHub
 
-| Feature | Git MCP | GitHub MCP |
-|---------|---------|------------|
-| **Install** | `uvx mcp-server-git` | See [setup guide](#github-mcp) |
-| **What It Does** | Local repo: log, diff, blame, branches | PRs, issues, code search, actions |
-| **Scope** | Local git operations | GitHub API (cloud) |
-| **API Key Required** | No | Yes (PAT) |
+| Tool | Install | Scope |
+|------|---------|-------|
+| **Git MCP** | `uvx mcp-server-git` | Local repo: log, diff, blame, branches |
+| **GitHub MCP** | [Setup guide](#github-mcp-setup) | PRs, issues, code search, Actions |
+
+---
 
 ### 8. Terminal & Shell
 
-| Feature | Desktop Commander | mcp-shell-server |
-|---------|-------------------|-----------------|
-| **Install** | `npx @wonderwhy-er/desktop-commander` | `pip install mcp-shell-server` |
-| **What It Does** | Full terminal control + file system | Whitelisted command execution |
-| **Security** | Broad access | Restricted to allowed commands |
-| **Best For** | Power users | Security-conscious setups |
+| Tool | Install | Security |
+|------|---------|----------|
+| **Desktop Commander** | `npx @wonderwhy-er/desktop-commander` | Broad access |
+| **mcp-shell-server** | `pip install mcp-shell-server` | Whitelisted commands only |
+
+---
 
 ### 9. Image & Vision
 
-| Feature | Screenshot MCP | mcp-vision |
-|---------|---------------|------------|
-| **Install** | `pip install screenshot-mcp-server` | See [repo](https://github.com/MikeyBeez/mcp-vision) |
-| **What It Does** | Screen capture + content processing | Camera/screenshot + Ollama vision analysis |
-| **Cloud Required** | No | No (uses Ollama locally) |
-| **Best For** | Quick screenshots for AI | Full local vision pipeline |
+| Tool | Install | Cloud? |
+|------|---------|--------|
+| **Screenshot MCP** | `pip install screenshot-mcp-server` | No |
+| **mcp-vision** | [GitHub](https://github.com/MikeyBeez/mcp-vision) | No (Ollama local) |
+
+---
 
 ### 10. Task & Project Management
 
-| Feature | Notion MCP | Jira MCP |
-|---------|-----------|----------|
-| **Install** | Official Notion integration | `pip install jira-mcp-server` |
-| **What It Does** | Pages, databases, search, content management | Tickets, projects, JQL search |
-| **Best For** | Teams using Notion | Teams using Jira/Atlassian |
+| Tool | Install | Platform |
+|------|---------|----------|
+| **Notion MCP** | Official integration | Notion |
+| **Jira MCP** | `pip install jira-mcp-server` | Jira Cloud |
+
+---
 
 ### 11. Security & Secrets
 
-| Feature | Vault MCP | mcp-secrets-vault |
-|---------|----------|-------------------|
-| **Install** | Via HashiCorp | `pip install mcp-secrets-vault` |
-| **What It Does** | HashiCorp Vault: enterprise secret management | Local mini-vault, AI calls APIs without seeing keys |
-| **Scope** | Enterprise | Individual / small team |
-| **Best For** | Production environments | Dev workflows, personal API keys |
+| Tool | Install | Scope |
+|------|---------|-------|
+| **mcp-secrets-vault** | `pip install mcp-secrets-vault` | Local mini-vault — AI never sees keys |
+| **Vault MCP** | HashiCorp setup | Enterprise secret management |
+
+---
 
 ### 12. Knowledge & Docs
 
 | Tool | Install | What It Does |
 |------|---------|-------------|
-| **Context7** | Via Cursor/Claude plugins | Always up-to-date library documentation |
+| **Context7** | Via Cursor/Claude plugins | Up-to-date library documentation |
+| **HF Skills** | `pip install huggingface-skills` | ACP skill definitions for ML tasks (datasets, training, eval) |
+
+---
 
 ### 13. Personal Evolution
 
-| Feature | homunculus | Hermes Agent |
-|---------|-----------|--------------|
-| **Install** | `git clone` + `pip install -e .` | `curl` install script |
-| **What It Does** | Learns YOUR coding patterns over time | Self-improving agent that creates skills from experience |
-| **Evolution Path** | Instincts -> Skills -> Agents | Learning loop: observe -> learn -> improve |
-| **MCP Support** | No | Yes (both client and server) |
-| **Best For** | AI that adapts to your style | Autonomous agent that grows with you |
+| Tool | Install | What It Does |
+|------|---------|-------------|
+| **homunculus** | `git clone` + `pip install -e .` | Learns YOUR coding patterns over time |
+| **Hermes Agent** | `pip install hermes-agent` | Self-improving agent that creates skills from experience |
+
+---
 
 ### 14. Local Inference
 
-| Feature | LM Studio | Ollama | LocalAI |
-|---------|-----------|--------|---------|
-| **Install** | Download from lmstudio.ai | `curl -fsSL https://ollama.ai/install.sh \| sh` | Docker / binary |
-| **Interface** | GUI | CLI + REST API | REST API (OpenAI-compatible) |
-| **Model Format** | GGUF | GGUF (auto-pull) | Multi-backend |
-| **Multi-Modal** | Text + Vision | Text + Vision | Text + Vision + Audio + Embeddings |
-| **GitHub Stars** | -- | 166k | 30k+ |
-| **Best For** | Beginners, visual management | Most popular, huge ecosystem | Advanced multi-modal pipelines |
+| Tool | Install | Interface | Stars |
+|------|---------|-----------|-------|
+| **Ollama** | `curl -fsSL https://ollama.ai/install.sh \| sh` | CLI + REST API | 166k |
+| **LM Studio** | Download from lmstudio.ai | GUI + REST API | -- |
+| **LocalAI** | Docker / binary | REST API (OpenAI drop-in) | 30k+ |
+| **hf-agents** | `pip install hf-agents` | CLI (auto-detects hardware, picks model) | -- |
 
-### 15. Agent Frameworks
+---
 
-| Feature | Hermes Agent | crewAI |
-|---------|-------------|--------|
-| **Install** | `curl` install script | `pip install crewai` |
-| **What It Does** | Self-improving agent with persistent memory | Multi-agent orchestration with roles |
-| **MCP Support** | Native (client + server) | Native |
-| **Self-Improving** | Yes (learning loop) | No |
-| **Multi-Agent** | Single agent | Yes (crews of agents) |
-| **GitHub Stars** | 8.7k | 45.9k |
-| **Best For** | Personal AI assistant that learns | Orchestrating teams of specialized agents |
+### 15. Hermes Ecosystem
+
+Everything that extends or enhances Hermes Agent.
+
+| Tool | What It Does | Source |
+|------|-------------|--------|
+| **hermes-agent-self-evolution** | Auto-optimizes skills via DSPy + genetic prompt evolution (~$2-10/run) | NousResearch official |
+| **hermes-CCC** | 46 native skills ported to Claude Code — no daemon, no OAuth | AlexAI-MCP |
+| **hermes-workspace** | Browser GUI: chat, terminal, memory browser, skills manager | 1.2k stars |
+| **awesome-hermes-agent** | Canonical curated list of all Hermes tools, skills, configs | 1.1k stars |
+| **hermes-skill-factory** | Auto-generates reusable skills from your own workflows | Community |
+| **hermes-council** | Adversarial multi-perspective debate MCP server | Community |
+
+#### Hermes Tips (from Reddit/community)
+
+- Enable **Honcho** explicitly — it's off by default, self-learning won't work without it
+- Create `AGENTS.md` in project root with architecture notes
+- Use `hermes doctor` for config diagnostics
+- **Never** set `GATEWAY_ALLOW_ALL_USERS=true` if terminal access is enabled
+- Power-user pattern: use OpenClaw as orchestrator, Hermes as executor
+- Self-evaluation is unreliable — pair with DeepEval or manual checkpoints
+
+#### Hermes Skill Packs
+
+| Pack | What It Contains |
+|------|-----------------|
+| **wondelai/skills** | 380+ general-purpose cross-platform skills |
+| **Anthropic-Cybersecurity-Skills** | 753+ MITRE ATT&CK-mapped security skills |
+| **chainlink-agent-skills** | Solana/Oracle data and smart contract tools |
+| **Skills Hub** (official) | Browse at hermes-agent.nousresearch.com/docs/skills |
+
+---
+
+### 16. Agent Frameworks
+
+| Tool | Install | Stars | Best For |
+|------|---------|-------|----------|
+| **Hermes Agent** | `pip install hermes-agent` | 62k | Self-improving personal agent |
+| **crewAI** | `pip install crewai` | 46k | Role-based multi-agent teams |
+| **smolagents** (HuggingFace) | `pip install smolagents` | 26k | Code-first agents that write+execute Python |
+| **Agno** (ex-Phidata) | `pip install agno` | -- | Batteries-included agent apps with built-in UI |
+| **claude-flow** | `npm i -g claude-flow` | -- | Claude-native swarm: 87 MCP tools, hive-mind, peer-to-peer messaging |
+| **workflow-orchestration** | `git clone` + `./setup.sh` | -- | 8 specialist agents with auto task decomposition |
+
+---
+
+### 17. Agent Skills & Tools
+
+Pre-built tool collections that give agents real-world capabilities.
+
+| Tool | Install | What It Gives Agents |
+|------|---------|---------------------|
+| **Composio** | `pip install composio-core` | 250+ pre-built SaaS tools (GitHub, Slack, Linear, Gmail, Jira) |
+| **LangChain Tools** | `pip install langchain langchain-community` | 100+ built-in tools (search, SQL, file I/O, APIs) |
+| **Browser Use** | `pip install browser-use` | Agent-native Chromium browser control (72k stars) |
+
+---
+
+### 18. Code Execution
+
+Secure environments for agents to write and run code.
+
+| Tool | Install | Where It Runs |
+|------|---------|--------------|
+| **E2B** | `pip install e2b-code-interpreter` | Cloud sandboxes (isolated Linux VMs) |
+| **Open Interpreter** | `pip install open-interpreter` | Local machine (Python, JS, shell) |
+
+---
+
+### 19. Voice & Audio
+
+| Tool | Install | What It Does |
+|------|---------|-------------|
+| **Pipecat** | `pip install pipecat-ai` | Real-time voice pipeline: STT + LLM + TTS (<1s latency) |
+| **Hermes Voice** | `pip install "hermes-agent[voice]"` | Voice support built into Hermes Agent |
+
+---
+
+### 20. Agent Orchestration
+
+Coordinate multiple agents, durable workflows, agent-to-agent communication.
+
+| Tool | Install | Stars | What It Does |
+|------|---------|-------|-------------|
+| **LangGraph** | `pip install langgraph` | 35k | Stateful graph-based agent orchestration. Best observability via LangSmith. |
+| **A2A Protocol** | [GitHub](https://github.com/a2aproject/A2A) | 10k | Google/Linux Foundation open protocol — agents discover and call each other over HTTP. |
+| **Temporal** | `pip install temporalio` | -- | Durable execution — workflows survive crashes, auto-retry, checkpoint at every step. |
+
+---
+
+### 21. Agent Evaluation
+
+Test and benchmark your agents.
+
+| Tool | Install | What It Does |
+|------|---------|-------------|
+| **DeepEval** | `pip install deepeval` | pytest-style agent evals. 50+ metrics. CI/CD integration. |
+| **AgentBench** | [GitHub](https://github.com/THUDM/AgentBench) | 8 task domains (OS, DB, web, knowledge graphs). Real interactive environments. |
+| **Inspect AI** | `pip install inspect-ai` | UK AI Safety Institute. Task-based eval with sandboxed tool execution. |
+
+---
+
+### 22. Agent Guardrails
+
+Safety, security, and constraint enforcement for agents.
+
+| Tool | Install | What It Does |
+|------|---------|-------------|
+| **NeMo Guardrails** | `pip install nemoguardrails` | NVIDIA. Programmable safety rails via Colang DSL. Proxy microservice pattern. |
+| **LlamaFirewall** | [GitHub](https://github.com/meta-llama/PurpleLlama) | Meta. Prompt injection detection + chain-of-thought auditing + CodeShield. |
+| **Invariant** | [GitHub](https://github.com/invariantlabs-ai/invariant) | Runtime guardrails. Policy enforcement for agent actions. |
+
+---
+
+### 23. Agent Observability
+
+Monitor, debug, and trace agent behavior.
+
+| Tool | Install | Open Source? | Best For |
+|------|---------|-------------|----------|
+| **AgentOps** | `pip install agentops` | SDK (hosted backend) | Full lifecycle tracking, tool calls, self-correction loops |
+| **Arize Phoenix** | `pip install arize-phoenix` | Yes (fully local) | Local-first debugging. OpenInference standard. RAG + agent traces. |
+| **Langfuse** | `pip install langfuse` | Yes (self-hostable) | Teams wanting full data ownership |
+| **LangSmith** | `pip install langsmith` | SDK (hosted backend) | Native LangGraph traces. Best for LangChain ecosystem. |
 
 ---
 
@@ -297,19 +422,14 @@ Per-project tools that give AI deep understanding of your codebase.
 Copy `mcp.json` from this repo to `~/.claude/mcp.json`, or run:
 
 ```bash
-# macOS/Linux
-./install.sh --mcp
-
-# Windows
-.\install.ps1 -MCP
+./install.sh --mcp     # macOS/Linux
+.\install.ps1 -MCP     # Windows
 ```
 
-This configures all MCP servers for Claude Code, Cursor, and LM Studio.
+### MCP Servers Included
 
-### What Gets Configured
-
-| MCP Server | Category | Install Method |
-|---|---|---|
+| Server | Category | Transport |
+|--------|----------|-----------|
 | agentmemory | Memory | npx |
 | basic-memory | Memory | uvx/pip |
 | hindsight | Memory | pip |
@@ -317,8 +437,8 @@ This configures all MCP servers for Claude Code, Cursor, and LM Studio.
 | repomix | Context | npx |
 | mcp-ragex | Code Search | pip |
 | fetch | Web | npx |
-| playwright | Web/Browser | npx |
-| brave-search | Web/Search | npx |
+| playwright | Browser | npx |
+| brave-search | Search | npx |
 | filesystem | File System | npx |
 | desktop-commander | File + Terminal | npx |
 | sqlite | Database | uvx |
@@ -327,115 +447,78 @@ This configures all MCP servers for Claude Code, Cursor, and LM Studio.
 | github | GitHub | HTTP |
 | mcp-shell-server | Terminal | pip |
 | screenshot | Vision | pip |
-| notion | Task Mgmt | HTTP |
 | secrets-vault | Security | pip |
 | hermes | Agent | pip |
+| cognee | Memory (advanced) | pip |
 
 ---
 
 ## Setup Guides
 
-### Hermes Agent
+### GitHub MCP Setup
 
 ```bash
-# Install (macOS/Linux)
-curl -fsSL https://raw.githubusercontent.com/NousResearch/hermes-agent/main/scripts/install.sh | bash
-source ~/.bashrc
-
-# Configure provider (use local Ollama or LM Studio)
-hermes config set provider.custom.base_url http://localhost:11434/v1
-
-# Or use Claude/OpenAI
-hermes config set provider anthropic
-hermes config set provider.anthropic.api_key YOUR_KEY
-
-# Run as MCP server (exposes tools to Claude Code)
-hermes mcp serve
-
-# Add to Claude Code mcp.json
-# {
-#   "hermes": {
-#     "command": "hermes",
-#     "args": ["mcp", "serve"]
-#   }
-# }
-```
-
-### Ollama
-
-```bash
-# Install
-curl -fsSL https://ollama.ai/install.sh | sh
-
-# Windows: download from https://ollama.com/download
-
-# Pull recommended models
-ollama pull qwen2.5-coder:32b    # Best for coding
-ollama pull llama3.3:70b          # General purpose
-ollama pull nomic-embed-text      # Embeddings
-
-# Ollama runs as a REST API on http://localhost:11434
-# Compatible with any OpenAI-client tool
-```
-
-### Brave Search MCP
-
-```bash
-# Get free API key: https://brave.com/search/api/
-# Then configure:
-# In mcp.json:
-# {
-#   "brave-search": {
-#     "command": "npx",
-#     "args": ["-y", "@brave/mcp-server"],
-#     "env": {
-#       "BRAVE_API_KEY": "your-key-here"
-#     }
-#   }
-# }
-```
-
-### GitHub MCP
-
-```bash
-# Generate a Personal Access Token at https://github.com/settings/tokens
-# Then add to Claude Code:
+# Generate PAT at https://github.com/settings/tokens (scopes: repo, read:org)
 claude mcp add github \
   --transport http \
   --url https://api.githubcopilot.com/mcp/ \
-  --header "Authorization: Bearer YOUR_GITHUB_PAT"
+  --header "Authorization: Bearer YOUR_PAT"
 ```
 
-### Desktop Commander
-
-```bash
-# Install and auto-configure
-npx @wonderwhy-er/desktop-commander setup
-
-# Or add manually to mcp.json:
-# {
-#   "desktop-commander": {
-#     "command": "npx",
-#     "args": ["-y", "@wonderwhy-er/desktop-commander"]
-#   }
-# }
-```
-
-### crewAI
+### Hermes Agent Setup
 
 ```bash
 # Install
-pip install crewai
+pip install hermes-agent
 
-# Create a crew
-crewai create crew my-research-crew
-cd my-research-crew
+# macOS/Linux alternative:
+curl -fsSL https://raw.githubusercontent.com/NousResearch/hermes-agent/main/scripts/install.sh | bash
 
-# crewAI has native MCP support — it auto-discovers
-# MCP servers and converts tools to LangChain format
+# Configure local inference
+hermes config set provider ollama
+hermes config set provider.ollama.base_url http://localhost:11434
+
+# Run as MCP server
+hermes mcp serve
+
+# Enable self-learning (OFF by default!)
+hermes config set honcho.enabled true
+
+# Check config
+hermes doctor
 ```
 
-For all other tools, see the individual docs in the `docs/` folder.
+### Ollama Setup
+
+```bash
+curl -fsSL https://ollama.ai/install.sh | sh
+ollama pull qwen2.5-coder:7b      # Coding
+ollama pull nomic-embed-text       # Embeddings
+ollama pull llava                  # Vision
+```
+
+### Brave Search Setup
+
+```bash
+# Get free API key: https://brave.com/search/api/
+# Add to mcp.json env: BRAVE_API_KEY
+```
+
+For all other tools, see the `docs/` folder.
+
+---
+
+## Curated Reference Lists
+
+These "awesome" lists are goldmines for discovering more tools:
+
+| List | What It Covers |
+|------|---------------|
+| **awesome-hermes-agent** | Full Hermes ecosystem — skills, GUIs, infra, MCP |
+| **awesome-ai-agents-2026** | 300+ resources, 20+ categories, monthly updates |
+| **e2b-dev/awesome-ai-agents** | Comprehensive long-running agent catalog |
+| **awesome-mcp-servers** | Every known MCP server, categorized |
+| **best-of-mcp-servers** | Weekly-updated ranked MCP server list |
 
 ---
 
@@ -443,32 +526,38 @@ For all other tools, see the individual docs in the `docs/` folder.
 
 ```
 ai-evolution-stack/
-+-- README.md                  # This file
-+-- install.sh                 # macOS/Linux installer (all tools)
-+-- install.ps1                # Windows installer (all tools)
-+-- mcp.json                   # Complete MCP configuration
-+-- docs/
-|   +-- agentmemory.md         # agentmemory deep dive
-|   +-- basic-memory.md        # Basic Memory deep dive
-|   +-- homunculus.md          # homunculus deep dive
-|   +-- lm-studio.md          # LM Studio deep dive
-|   +-- mex.md                 # mex deep dive
-|   +-- hermes.md              # Hermes Agent guide
-|   +-- ollama.md              # Ollama guide
-|   +-- web-browser.md         # Fetch + Playwright + Brave guide
-|   +-- database.md            # SQLite + Postgres MCP guide
-|   +-- git-github.md          # Git + GitHub MCP guide
-|   +-- security.md            # Vault + secrets-vault guide
-+-- examples/
-|   +-- claude-mcp.json        # Claude Code MCP config
-|   +-- cursor-mcp.json        # Cursor MCP config
-|   +-- lmstudio-mcp.json     # LM Studio MCP config
-+-- scripts/
-|   +-- update-all.sh          # Update all installed tools
-|   +-- verify-install.sh      # Verify installation status
-+-- .gitignore
++-- README.md                     # This file (the definitive reference)
++-- QUICKSTART.md                 # 5-minute setup guide
++-- install.sh                    # macOS/Linux installer (all 60+ tools)
++-- install.ps1                   # Windows installer (all 60+ tools)
++-- mcp.json                      # Complete MCP server configuration
 +-- LICENSE
-+-- QUICKSTART.md
++-- docs/
+|   +-- agentmemory.md            # agentmemory deep dive
+|   +-- basic-memory.md           # Basic Memory deep dive
+|   +-- homunculus.md             # homunculus deep dive
+|   +-- lm-studio.md             # LM Studio deep dive
+|   +-- mex.md                    # mex deep dive
+|   +-- hermes.md                 # Hermes Agent guide
+|   +-- ollama.md                 # Ollama guide
+|   +-- web-browser.md            # Fetch + Playwright + Brave
+|   +-- database.md               # SQLite + Postgres MCP
+|   +-- git-github.md             # Git + GitHub MCP
+|   +-- security.md               # Vault + secrets-vault
+|   +-- hermes-ecosystem.md       # Full Hermes ecosystem guide
+|   +-- advanced-memory.md        # Mem0, Letta, Graphiti, Cognee, LangMem, MemOS
+|   +-- agent-capabilities.md     # Composio, Browser Use, E2B, Open Interpreter, Pipecat
+|   +-- orchestration.md          # LangGraph, A2A, Temporal
+|   +-- evaluation.md             # DeepEval, AgentBench, Inspect AI
+|   +-- guardrails.md             # NeMo, LlamaFirewall, Invariant
+|   +-- observability.md          # AgentOps, Phoenix, Langfuse, LangSmith
++-- examples/
+|   +-- claude-mcp.json           # Claude Code config
+|   +-- cursor-mcp.json           # Cursor config
+|   +-- lmstudio-mcp.json        # LM Studio config
++-- scripts/
+|   +-- update-all.sh             # Update all installed tools
+|   +-- verify-install.sh         # Verify installation status
 ```
 
 ---
@@ -476,13 +565,7 @@ ai-evolution-stack/
 ## Update All Tools
 
 ```bash
-# Run the update script
 ./scripts/update-all.sh
-
-# Or update manually
-npm update -g @agentmemory/agentmemory mex-cli repomix
-pip install --upgrade mempalace hindsight-server basic-memory crewai mcp-ragex
-ollama pull qwen2.5-coder:32b   # Updates models too
 ```
 
 ---
@@ -491,23 +574,25 @@ ollama pull qwen2.5-coder:32b   # Updates models too
 
 | Issue | Solution |
 |-------|----------|
-| MCP server not found | Check PATH: `echo $PATH` or restart terminal |
+| MCP server not found | Check PATH, restart terminal |
 | Permission denied | `chmod +x install.sh` |
-| Port conflicts | Change ports in mcp.json or stop conflicting services |
-| Ollama model not loading | Check `ollama serve` is running |
-| Brave Search 401 | Verify `BRAVE_API_KEY` in env |
+| Port conflicts | Stop conflicting services or change ports in config |
+| Ollama model not loading | Run `ollama serve` first |
+| Brave Search 401 | Check `BRAVE_API_KEY` |
 | GitHub MCP auth failed | Regenerate PAT with correct scopes |
-| Memory not persisting | Check ChromaDB/SQLite file permissions |
-| Windows: python3 not found | Use `python` instead of `python3` on Windows |
-| Desktop Commander hangs | Kill with `npx @wonderwhy-er/desktop-commander stop` |
+| Hermes self-learning not working | Enable Honcho: `hermes config set honcho.enabled true` |
+| Memory not persisting | Check file/DB permissions |
+| Windows: python3 not found | Use `python` instead |
+| Desktop Commander hangs | `npx @wonderwhy-er/desktop-commander stop` |
+| Agent eval tests failing | Check model access and API keys |
 
 ---
 
 ## Contributing
 
-Found a new tool? Open a PR! The goal is **2+ options per category**.
+Found a new tool? Open a PR! The goal: **every category anyone might ever need**.
 
-When adding a tool, include:
+When adding a tool:
 1. Add to the relevant category table in README
 2. Add install function to `install.sh` and `install.ps1`
 3. Add MCP config to `mcp.json` if applicable
@@ -521,4 +606,4 @@ MIT - Use however you want. Keep it local. Stay private.
 
 ---
 
-**Made for the local-first AI community.**
+**The definitive AI toolkit. Made for builders.**

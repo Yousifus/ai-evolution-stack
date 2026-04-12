@@ -1,5 +1,5 @@
 # AI Evolution Stack — Windows Installer
-# 30+ tools across 15 categories. One script installs everything.
+# 70+ tools across 22 categories. One script installs everything.
 # Works on Windows 10/11 with PowerShell 5.1+
 
 param(
@@ -9,7 +9,12 @@ param(
     [switch]$Web,
     [switch]$Database,
     [switch]$Agents,
+    [switch]$Hermes,
     [switch]$Inference,
+    [switch]$Capabilities,
+    [switch]$Orchestration,
+    [switch]$Observability,
+    [switch]$Configure,
     [switch]$MCP,
     [switch]$Verify,
     [switch]$Help
@@ -285,6 +290,173 @@ function Install-AgentFrameworks {
     Write-Header "Agent Frameworks"
     Install-Hermes
     Safe-PipInstall "crewai"
+    Safe-PipInstall "smolagents"
+    Safe-PipInstall "agno"
+    Safe-NpmInstall "claude-flow"
+    Safe-PipInstall "hf-agents"
+    Safe-PipInstall "huggingface-skills"
+    Write-Info "workflow-orchestration: git clone https://github.com/barkain/claude-code-workflow-orchestration"
+}
+
+# ============================================
+# ADVANCED MEMORY
+# ============================================
+
+function Install-AdvancedMemory {
+    Write-Header "Advanced Memory Systems"
+    Safe-PipInstall "mem0ai"
+    Safe-PipInstall "letta"
+    Safe-PipInstall "graphiti-core"
+    Safe-PipInstall "cognee"
+    Safe-PipInstall "langmem"
+    Safe-PipInstall "memclaw"
+    Write-Info "MemOS: pip install memos (optional)"
+}
+
+# ============================================
+# AGENT CAPABILITIES
+# ============================================
+
+function Install-Capabilities {
+    Write-Header "Agent Capabilities"
+    Safe-PipInstall "composio-core"
+    Safe-PipInstall "browser-use"
+    Safe-PipInstall "e2b-code-interpreter"
+    Safe-PipInstall "open-interpreter"
+    Safe-PipInstall "pipecat-ai"
+}
+
+# ============================================
+# ORCHESTRATION, EVAL, GUARDRAILS, OBSERVABILITY
+# ============================================
+
+function Install-Orchestration {
+    Write-Header "Agent Orchestration"
+    Safe-PipInstall "langgraph"
+    Safe-PipInstall "temporalio"
+    Write-Info "A2A Protocol: see https://github.com/a2aproject/A2A"
+}
+
+function Install-Evaluation {
+    Write-Header "Agent Evaluation"
+    Safe-PipInstall "deepeval"
+    Safe-PipInstall "inspect-ai"
+}
+
+function Install-Guardrails {
+    Write-Header "Agent Guardrails"
+    Safe-PipInstall "nemoguardrails"
+    Write-Info "LlamaFirewall: see https://github.com/meta-llama/PurpleLlama"
+}
+
+function Install-Observability {
+    Write-Header "Agent Observability"
+    Safe-PipInstall "agentops"
+    Safe-PipInstall "arize-phoenix"
+    Safe-PipInstall "langfuse"
+}
+
+# ============================================
+# HERMES ECOSYSTEM
+# ============================================
+
+function Install-HermesEcosystem {
+    Write-Header "Hermes Ecosystem"
+    Install-Hermes
+    Write-Info "hermes-CCC: git clone https://github.com/AlexAI-MCP/hermes-CCC.git"
+    Write-Info "hermes-workspace: git clone https://github.com/outsourc-e/hermes-workspace.git"
+    Write-Info "self-evolution: git clone https://github.com/NousResearch/hermes-agent-self-evolution.git"
+    Write-Info "awesome-hermes-agent: https://github.com/0xNyk/awesome-hermes-agent"
+    Write-Info "Skill packs: browse at hermes-agent.nousresearch.com/docs/skills"
+}
+
+# ============================================
+# INTERACTIVE CONFIGURATION WIZARD
+# ============================================
+
+function Configure-Secrets {
+    Write-Header "Configuration Wizard"
+    Write-Host ""
+    Write-Host "  This will walk you through setting up API keys and secrets." -ForegroundColor White
+    Write-Host "  Press Enter to skip any you don't have yet." -ForegroundColor White
+    Write-Host ""
+
+    $envFile = "$ScriptDir\.env"
+    "" | Out-File -FilePath $envFile -Encoding utf8
+
+    # Brave Search
+    Write-Host "  1/6 - Brave Search API" -ForegroundColor Cyan
+    Write-Info "Free key at: https://brave.com/search/api/"
+    $braveKey = Read-Host "  Brave API Key (Enter to skip)"
+    if ($braveKey) {
+        "BRAVE_API_KEY=$braveKey" | Add-Content $envFile
+        Write-Success "Brave Search key saved"
+    } else { Write-Warn "Skipped" }
+
+    # GitHub PAT
+    Write-Host "`n  2/6 - GitHub Personal Access Token" -ForegroundColor Cyan
+    Write-Info "Generate at: https://github.com/settings/tokens"
+    $ghPat = Read-Host "  GitHub PAT (Enter to skip)"
+    if ($ghPat) {
+        "GITHUB_PAT=$ghPat" | Add-Content $envFile
+        Write-Success "GitHub PAT saved"
+    } else { Write-Warn "Skipped" }
+
+    # Hermes provider
+    Write-Host "`n  3/6 - Hermes Agent LLM Provider" -ForegroundColor Cyan
+    $hermesProvider = Read-Host "  Provider (ollama/anthropic/openai) [ollama]"
+    if (-not $hermesProvider) { $hermesProvider = "ollama" }
+    "HERMES_PROVIDER=$hermesProvider" | Add-Content $envFile
+
+    if ($hermesProvider -eq "anthropic") {
+        $anthKey = Read-Host "  Anthropic API Key"
+        if ($anthKey) { "ANTHROPIC_API_KEY=$anthKey" | Add-Content $envFile }
+    } elseif ($hermesProvider -eq "openai") {
+        $oaiKey = Read-Host "  OpenAI API Key"
+        if ($oaiKey) { "OPENAI_API_KEY=$oaiKey" | Add-Content $envFile }
+    } else {
+        Write-Success "Using Ollama (local) - no API key needed"
+    }
+
+    # Ollama models
+    Write-Host "`n  4/6 - Ollama Model Selection" -ForegroundColor Cyan
+    Write-Host "  1) qwen2.5-coder:7b (4GB)"
+    Write-Host "  2) qwen2.5-coder:32b (20GB)"
+    Write-Host "  3) llama3.3:8b (5GB)"
+    Write-Host "  4) nomic-embed-text (300MB)"
+    Write-Host "  5) llava (4GB, vision)"
+    Write-Host "  6) All  7) Skip"
+    $modelChoice = Read-Host "  Choice [1,4]"
+    if (-not $modelChoice) { $modelChoice = "1,4" }
+    "OLLAMA_MODELS=$modelChoice" | Add-Content $envFile
+
+    # DB path
+    Write-Host "`n  5/6 - Default SQLite Database Path" -ForegroundColor Cyan
+    $dbPath = Read-Host "  Path [./data.db]"
+    if (-not $dbPath) { $dbPath = "./data.db" }
+    "SQLITE_DB_PATH=$dbPath" | Add-Content $envFile
+
+    # Postgres
+    Write-Host "`n  6/6 - PostgreSQL Connection (optional)" -ForegroundColor Cyan
+    $pgConn = Read-Host "  Connection string (Enter to skip)"
+    if ($pgConn) { "POSTGRES_CONNECTION=$pgConn" | Add-Content $envFile }
+
+    # Apply to mcp.json
+    $mcpContent = Get-Content "$ScriptDir\mcp.json" -Raw
+    if ($braveKey) { $mcpContent = $mcpContent -replace "YOUR_BRAVE_API_KEY", $braveKey }
+    if ($dbPath -ne "./data.db") { $mcpContent = $mcpContent -replace "\./data\.db", $dbPath }
+    if ($pgConn) { $mcpContent = $mcpContent -replace "postgresql://localhost/mydb", $pgConn }
+    $mcpContent | Out-File "$ScriptDir\mcp.json" -Encoding utf8
+
+    # Ensure .env in .gitignore
+    $gitignore = "$ScriptDir\.gitignore"
+    if (Test-Path $gitignore) {
+        $content = Get-Content $gitignore -Raw
+        if ($content -notmatch "\.env") { ".env" | Add-Content $gitignore }
+    }
+
+    Write-Success "Configuration saved to $envFile"
+    Write-Info "Re-run with -Configure to update later"
 }
 
 # ============================================
@@ -380,6 +552,7 @@ function Verify-Installation {
 
 function Install-Everything {
     Install-MemoryLayer
+    Install-AdvancedMemory
     Install-ProjectContext
     Install-CodeSearch
     Install-WebBrowser
@@ -393,6 +566,12 @@ function Install-Everything {
     Install-PersonalEvolution
     Install-LocalInference
     Install-AgentFrameworks
+    Install-Capabilities
+    Install-Orchestration
+    Install-Evaluation
+    Install-Guardrails
+    Install-Observability
+    Install-HermesEcosystem
     Setup-MCP
     Verify-Installation
 }
@@ -412,25 +591,36 @@ function Install-Core {
 function Show-Menu {
     Write-Host ""
     Write-Host "  AI Evolution Stack Installer" -ForegroundColor Cyan
-    Write-Host "  30+ tools across 15 categories" -ForegroundColor White
+    Write-Host "  70+ tools across 22 categories" -ForegroundColor White
     Write-Host ""
     Write-Host "  1)  Everything (recommended)"
     Write-Host "  2)  Core only (memory + context + code search + MCP)"
     Write-Host ""
-    Write-Host "  -- Individual Categories --"
-    Write-Host "  3)  Memory layer"
-    Write-Host "  4)  Project context"
-    Write-Host "  5)  Web & browser"
-    Write-Host "  6)  Database"
-    Write-Host "  7)  Git & GitHub"
-    Write-Host "  8)  Personal evolution (homunculus, hermes)"
-    Write-Host "  9)  Local inference (ollama, localai)"
-    Write-Host "  10) Agent frameworks (hermes, crewai)"
+    Write-Host "  -- Foundation --"
+    Write-Host "  3)  Memory layer (agentmemory, basic-memory, mempalace, hindsight)"
+    Write-Host "  4)  Advanced memory (Mem0, Letta, Graphiti, Cognee, LangMem, MemClaw)"
+    Write-Host "  5)  Project context (repomix, mex)"
+    Write-Host "  6)  Local inference (ollama, localai, hf-agents)"
+    Write-Host ""
+    Write-Host "  -- Tools --"
+    Write-Host "  7)  Web & browser"
+    Write-Host "  8)  Database (sqlite, postgres)"
+    Write-Host "  9)  Git & GitHub"
+    Write-Host "  10) Agent capabilities (composio, e2b, voice, browser-use)"
+    Write-Host ""
+    Write-Host "  -- Agents --"
+    Write-Host "  11) Agent frameworks (hermes, crewai, claude-flow, smolagents)"
+    Write-Host "  12) Hermes ecosystem"
+    Write-Host "  13) Orchestration (langgraph, temporal)"
+    Write-Host ""
+    Write-Host "  -- Quality --"
+    Write-Host "  14) Evaluation + Guardrails + Observability"
     Write-Host ""
     Write-Host "  -- Config --"
-    Write-Host "  11) Setup MCP configuration only"
-    Write-Host "  12) Verify installation"
-    Write-Host "  13) Exit"
+    Write-Host "  15) Configure secrets & API keys (interactive wizard)"
+    Write-Host "  16) Setup MCP configuration only"
+    Write-Host "  17) Verify installation"
+    Write-Host "  18) Exit"
     Write-Host ""
 }
 
@@ -441,8 +631,8 @@ function Show-Menu {
 function Main {
     Write-Host ""
     Write-Host "  AI Evolution Stack" -ForegroundColor Cyan
-    Write-Host "  The Ultimate Local-First AI Toolkit" -ForegroundColor White
-    Write-Host "  30+ tools. 15 categories. One script." -ForegroundColor White
+    Write-Host "  The Definitive Local-First AI Toolkit" -ForegroundColor White
+    Write-Host "  70+ tools. 22 categories. One script." -ForegroundColor White
     Write-Host ""
 
     if ($Help) {
@@ -462,15 +652,20 @@ function Main {
 
     Check-Dependencies
 
-    if ($Everything) { Install-Everything; return }
-    if ($Core)       { Install-Core; return }
-    if ($Memory)     { Install-MemoryLayer; return }
-    if ($Web)        { Install-WebBrowser; return }
-    if ($Database)   { Install-Database; return }
-    if ($Agents)     { Install-AgentFrameworks; return }
-    if ($Inference)  { Install-LocalInference; return }
-    if ($MCP)        { Setup-MCP; return }
-    if ($Verify)     { Verify-Installation; return }
+    if ($Everything)     { Install-Everything; return }
+    if ($Core)           { Install-Core; return }
+    if ($Memory)         { Install-MemoryLayer; Install-AdvancedMemory; return }
+    if ($Web)            { Install-WebBrowser; return }
+    if ($Database)       { Install-Database; return }
+    if ($Agents)         { Install-AgentFrameworks; return }
+    if ($Hermes)         { Install-HermesEcosystem; return }
+    if ($Inference)      { Install-LocalInference; return }
+    if ($Capabilities)   { Install-Capabilities; return }
+    if ($Orchestration)  { Install-Orchestration; return }
+    if ($Observability)  { Install-Observability; Install-Evaluation; Install-Guardrails; return }
+    if ($Configure)      { Configure-Secrets; return }
+    if ($MCP)            { Setup-MCP; return }
+    if ($Verify)         { Verify-Installation; return }
 
     # Interactive
     while ($true) {
@@ -481,20 +676,25 @@ function Main {
             "1"  { Install-Everything; break }
             "2"  { Install-Core; break }
             "3"  { Install-MemoryLayer; break }
-            "4"  { Install-ProjectContext; break }
-            "5"  { Install-WebBrowser; break }
-            "6"  { Install-Database; break }
-            "7"  { Install-GitTools; break }
-            "8"  { Install-PersonalEvolution; break }
-            "9"  { Install-LocalInference; break }
-            "10" { Install-AgentFrameworks; break }
-            "11" { Setup-MCP; break }
-            "12" { Verify-Installation; continue }
-            "13" { Write-Info "Exiting..."; exit 0 }
+            "4"  { Install-AdvancedMemory; break }
+            "5"  { Install-ProjectContext; break }
+            "6"  { Install-LocalInference; break }
+            "7"  { Install-WebBrowser; break }
+            "8"  { Install-Database; break }
+            "9"  { Install-GitTools; break }
+            "10" { Install-Capabilities; break }
+            "11" { Install-AgentFrameworks; break }
+            "12" { Install-HermesEcosystem; break }
+            "13" { Install-Orchestration; break }
+            "14" { Install-Evaluation; Install-Guardrails; Install-Observability; break }
+            "15" { Configure-Secrets; break }
+            "16" { Setup-MCP; break }
+            "17" { Verify-Installation; continue }
+            "18" { Write-Info "Exiting..."; exit 0 }
             default { Write-Err "Invalid choice" }
         }
 
-        if ($choice -in @("1","2","3","4","5","6","7","8","9","10","11")) { break }
+        if ($choice -in @("1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16")) { break }
     }
 
     Write-Host ""

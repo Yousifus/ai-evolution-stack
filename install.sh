@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # AI Evolution Stack — Universal Installer
-# 30+ tools across 15 categories. One script installs everything.
+# 60+ tools across 22 categories. One script installs everything.
 # Works on macOS and Linux. Everything local. No cloud. Full privacy.
 
 set -e
@@ -426,6 +426,275 @@ install_agent_frameworks() {
     log_header "Agent Frameworks"
     install_hermes
     install_crewai
+    safe_pip_install "smolagents"
+    safe_pip_install "agno"
+    safe_npm_install "claude-flow"
+    safe_pip_install "hf-agents"
+    safe_pip_install "huggingface-skills"
+    log_info "workflow-orchestration: git clone https://github.com/barkain/claude-code-workflow-orchestration"
+}
+
+# ============================================
+# ADVANCED MEMORY
+# ============================================
+
+install_advanced_memory() {
+    log_header "Advanced Memory Systems"
+    safe_pip_install "mem0ai"
+    safe_pip_install "letta"
+    safe_pip_install "graphiti-core"
+    safe_pip_install "cognee"
+    safe_pip_install "langmem"
+    safe_pip_install "memclaw"
+    log_info "MemOS: pip install memos (optional — multi-agent shared pool)"
+}
+
+# ============================================
+# AGENT CAPABILITIES
+# ============================================
+
+install_composio() {
+    log_info "Installing Composio (250+ pre-built SaaS tools)..."
+    safe_pip_install "composio-core"
+}
+
+install_browser_use() {
+    log_info "Installing Browser Use (agent-native Chromium — 72k stars)..."
+    safe_pip_install "browser-use"
+}
+
+install_e2b() {
+    log_info "Installing E2B (secure code execution sandboxes)..."
+    safe_pip_install "e2b-code-interpreter"
+}
+
+install_open_interpreter() {
+    log_info "Installing Open Interpreter (local code execution)..."
+    safe_pip_install "open-interpreter"
+}
+
+install_pipecat() {
+    log_info "Installing Pipecat (real-time voice pipeline)..."
+    safe_pip_install "pipecat-ai"
+}
+
+install_capabilities() {
+    log_header "Agent Capabilities (skills, execution, voice, browser)"
+    install_composio
+    install_browser_use
+    install_e2b
+    install_open_interpreter
+    install_pipecat
+}
+
+# ============================================
+# AGENT ORCHESTRATION
+# ============================================
+
+install_orchestration() {
+    log_header "Agent Orchestration"
+    safe_pip_install "langgraph"
+    safe_pip_install "temporalio"
+    log_info "A2A Protocol: see https://github.com/a2aproject/A2A"
+    log_success "LangGraph + Temporal installed"
+}
+
+# ============================================
+# AGENT EVALUATION
+# ============================================
+
+install_evaluation() {
+    log_header "Agent Evaluation"
+    safe_pip_install "deepeval"
+    safe_pip_install "inspect-ai"
+    log_info "AgentBench: see https://github.com/THUDM/AgentBench"
+    log_success "DeepEval + Inspect AI installed"
+}
+
+# ============================================
+# AGENT GUARDRAILS
+# ============================================
+
+install_guardrails() {
+    log_header "Agent Guardrails"
+    safe_pip_install "nemoguardrails"
+    log_info "LlamaFirewall: see https://github.com/meta-llama/PurpleLlama"
+    log_info "Invariant: see https://github.com/invariantlabs-ai/invariant"
+    log_success "NeMo Guardrails installed"
+}
+
+# ============================================
+# AGENT OBSERVABILITY
+# ============================================
+
+install_observability() {
+    log_header "Agent Observability"
+    safe_pip_install "agentops"
+    safe_pip_install "arize-phoenix"
+    safe_pip_install "langfuse"
+    log_info "LangSmith: pip install langsmith (requires LangChain API key)"
+    log_success "AgentOps + Phoenix + Langfuse installed"
+}
+
+# ============================================
+# HERMES ECOSYSTEM
+# ============================================
+
+install_hermes_ecosystem() {
+    log_header "Hermes Ecosystem"
+    install_hermes
+
+    log_info "hermes-CCC (Claude Code port): git clone https://github.com/AlexAI-MCP/hermes-CCC.git"
+    log_info "hermes-workspace (browser GUI): git clone https://github.com/outsourc-e/hermes-workspace.git"
+    log_info "self-evolution: git clone https://github.com/NousResearch/hermes-agent-self-evolution.git"
+    log_info "awesome-hermes-agent: https://github.com/0xNyk/awesome-hermes-agent"
+    log_info ""
+    log_info "Skill packs:"
+    log_info "  wondelai/skills — 380+ general-purpose skills"
+    log_info "  Anthropic-Cybersecurity-Skills — 753+ security skills"
+    log_info "  Browse more at: hermes-agent.nousresearch.com/docs/skills"
+    log_success "Hermes ecosystem info provided"
+}
+
+# ============================================
+# INTERACTIVE CONFIGURATION WIZARD
+# ============================================
+
+configure_secrets() {
+    log_header "Configuration Wizard"
+    echo ""
+    echo -e "  ${BOLD}This will walk you through setting up API keys and secrets.${NC}"
+    echo -e "  Press Enter to skip any you don't have yet."
+    echo ""
+
+    # Create .env file
+    ENV_FILE="$SCRIPT_DIR/.env"
+    > "$ENV_FILE"
+
+    # Brave Search
+    echo -e "  ${CYAN}1/6 — Brave Search API${NC}"
+    echo "  Free key at: https://brave.com/search/api/"
+    read -p "  Brave API Key (Enter to skip): " BRAVE_KEY
+    if [ -n "$BRAVE_KEY" ]; then
+        echo "BRAVE_API_KEY=$BRAVE_KEY" >> "$ENV_FILE"
+        log_success "Brave Search key saved"
+    else
+        log_warn "Skipped — Brave Search won't work without a key"
+    fi
+    echo ""
+
+    # GitHub PAT
+    echo -e "  ${CYAN}2/6 — GitHub Personal Access Token${NC}"
+    echo "  Generate at: https://github.com/settings/tokens"
+    echo "  Scopes needed: repo, read:org, read:user"
+    read -p "  GitHub PAT (Enter to skip): " GITHUB_PAT
+    if [ -n "$GITHUB_PAT" ]; then
+        echo "GITHUB_PAT=$GITHUB_PAT" >> "$ENV_FILE"
+        log_success "GitHub PAT saved"
+    else
+        log_warn "Skipped — GitHub MCP won't work without a PAT"
+    fi
+    echo ""
+
+    # Hermes provider
+    echo -e "  ${CYAN}3/6 — Hermes Agent LLM Provider${NC}"
+    echo "  Options: ollama (local), anthropic, openai"
+    read -p "  Provider [ollama]: " HERMES_PROVIDER
+    HERMES_PROVIDER="${HERMES_PROVIDER:-ollama}"
+    echo "HERMES_PROVIDER=$HERMES_PROVIDER" >> "$ENV_FILE"
+
+    if [ "$HERMES_PROVIDER" = "anthropic" ]; then
+        read -p "  Anthropic API Key: " ANTHROPIC_KEY
+        [ -n "$ANTHROPIC_KEY" ] && echo "ANTHROPIC_API_KEY=$ANTHROPIC_KEY" >> "$ENV_FILE"
+    elif [ "$HERMES_PROVIDER" = "openai" ]; then
+        read -p "  OpenAI API Key: " OPENAI_KEY
+        [ -n "$OPENAI_KEY" ] && echo "OPENAI_API_KEY=$OPENAI_KEY" >> "$ENV_FILE"
+    else
+        log_success "Using Ollama (local) — no API key needed"
+    fi
+    echo ""
+
+    # Ollama models
+    echo -e "  ${CYAN}4/6 — Ollama Model Selection${NC}"
+    echo "  Which models to pull? (takes time + disk space)"
+    echo "  1) qwen2.5-coder:7b  (4GB — recommended)"
+    echo "  2) qwen2.5-coder:32b (20GB — best coding)"
+    echo "  3) llama3.3:8b        (5GB — general purpose)"
+    echo "  4) nomic-embed-text   (300MB — embeddings)"
+    echo "  5) llava              (4GB — vision)"
+    echo "  6) All of the above"
+    echo "  7) Skip"
+    read -p "  Choice [1,4]: " MODEL_CHOICE
+    MODEL_CHOICE="${MODEL_CHOICE:-1,4}"
+    echo "OLLAMA_MODELS=$MODEL_CHOICE" >> "$ENV_FILE"
+    log_success "Model selection saved"
+    echo ""
+
+    # Database path
+    echo -e "  ${CYAN}5/6 — Default SQLite Database Path${NC}"
+    read -p "  Path [./data.db]: " DB_PATH
+    DB_PATH="${DB_PATH:-./data.db}"
+    echo "SQLITE_DB_PATH=$DB_PATH" >> "$ENV_FILE"
+    log_success "Database path: $DB_PATH"
+    echo ""
+
+    # Postgres
+    echo -e "  ${CYAN}6/6 — PostgreSQL Connection (optional)${NC}"
+    read -p "  Connection string (Enter to skip): " PG_CONN
+    if [ -n "$PG_CONN" ]; then
+        echo "POSTGRES_CONNECTION=$PG_CONN" >> "$ENV_FILE"
+        log_success "Postgres connection saved"
+    else
+        log_warn "Skipped — Postgres MCP will use default"
+    fi
+    echo ""
+
+    # Apply config to mcp.json
+    log_info "Applying configuration to MCP config..."
+    apply_config_to_mcp
+
+    log_success "Configuration saved to $ENV_FILE"
+    log_info "You can edit this file later or re-run: ./install.sh --configure"
+    echo ""
+
+    # Add .env to .gitignore if not already there
+    grep -q "^\.env$" "$SCRIPT_DIR/.gitignore" 2>/dev/null || echo ".env" >> "$SCRIPT_DIR/.gitignore"
+}
+
+apply_config_to_mcp() {
+    local MCP_FILE="$SCRIPT_DIR/mcp.json"
+    local ENV_FILE="$SCRIPT_DIR/.env"
+
+    # Read values from .env
+    BRAVE_KEY=$(grep "^BRAVE_API_KEY=" "$ENV_FILE" 2>/dev/null | cut -d= -f2-)
+    DB_PATH=$(grep "^SQLITE_DB_PATH=" "$ENV_FILE" 2>/dev/null | cut -d= -f2-)
+    PG_CONN=$(grep "^POSTGRES_CONNECTION=" "$ENV_FILE" 2>/dev/null | cut -d= -f2-)
+
+    # Apply Brave key
+    if [ -n "$BRAVE_KEY" ] && [ "$BRAVE_KEY" != "YOUR_BRAVE_API_KEY" ]; then
+        if command_exists sed; then
+            sed -i.bak "s/YOUR_BRAVE_API_KEY/$BRAVE_KEY/g" "$MCP_FILE" 2>/dev/null || true
+            rm -f "$MCP_FILE.bak"
+        fi
+    fi
+
+    # Apply DB path
+    if [ -n "$DB_PATH" ] && [ "$DB_PATH" != "./data.db" ]; then
+        if command_exists sed; then
+            sed -i.bak "s|./data.db|$DB_PATH|g" "$MCP_FILE" 2>/dev/null || true
+            rm -f "$MCP_FILE.bak"
+        fi
+    fi
+
+    # Apply Postgres connection
+    if [ -n "$PG_CONN" ]; then
+        if command_exists sed; then
+            sed -i.bak "s|postgresql://localhost/mydb|$PG_CONN|g" "$MCP_FILE" 2>/dev/null || true
+            rm -f "$MCP_FILE.bak"
+        fi
+    fi
+
+    log_success "MCP config updated with your values"
 }
 
 # ============================================
@@ -537,6 +806,7 @@ verify_installation() {
 
 install_everything() {
     install_memory_layer
+    install_advanced_memory
     install_project_context
     install_code_search
     install_web_browser
@@ -550,6 +820,12 @@ install_everything() {
     install_personal_evolution
     install_local_inference
     install_agent_frameworks
+    install_capabilities
+    install_orchestration
+    install_evaluation
+    install_guardrails
+    install_observability
+    install_hermes_ecosystem
     setup_mcp
     verify_installation
 }
@@ -569,25 +845,38 @@ install_core() {
 show_menu() {
     echo ""
     echo -e "${CYAN}${BOLD}  AI Evolution Stack Installer${NC}"
-    echo -e "  ${BOLD}30+ tools across 15 categories${NC}"
+    echo -e "  ${BOLD}60+ tools across 22 categories${NC}"
     echo ""
     echo "  1)  Everything (recommended)"
     echo "  2)  Core only (memory + context + code search + MCP)"
     echo ""
-    echo "  -- Individual Categories --"
+    echo "  -- Foundation --"
     echo "  3)  Memory layer (agentmemory, basic-memory, mempalace, hindsight)"
-    echo "  4)  Project context (repomix, mex)"
-    echo "  5)  Web & browser (fetch, playwright, brave search)"
-    echo "  6)  Database (sqlite, postgres)"
-    echo "  7)  Git & GitHub"
-    echo "  8)  Personal evolution (homunculus, hermes)"
-    echo "  9)  Local inference (ollama, localai)"
-    echo "  10) Agent frameworks (hermes, crewai)"
+    echo "  4)  Advanced memory (Mem0, Letta, Graphiti, Cognee, LangMem)"
+    echo "  5)  Project context (repomix, mex)"
+    echo "  6)  Local inference (ollama, localai)"
+    echo ""
+    echo "  -- Tools --"
+    echo "  7)  Web & browser (fetch, playwright, brave, browser-use)"
+    echo "  8)  Database (sqlite, postgres)"
+    echo "  9)  Git & GitHub"
+    echo "  10) Agent capabilities (composio, e2b, voice, browser-use)"
+    echo ""
+    echo "  -- Agents --"
+    echo "  11) Agent frameworks (hermes, crewai, smolagents, agno)"
+    echo "  12) Hermes ecosystem (self-evolution, CCC, workspace, skills)"
+    echo "  13) Orchestration (langgraph, temporal, a2a)"
+    echo ""
+    echo "  -- Quality --"
+    echo "  14) Evaluation (deepeval, inspect-ai)"
+    echo "  15) Guardrails (nemo, llamafirewall)"
+    echo "  16) Observability (agentops, phoenix, langfuse)"
     echo ""
     echo "  -- Config --"
-    echo "  11) Setup MCP configuration only"
-    echo "  12) Verify installation"
-    echo "  13) Exit"
+    echo "  17) Configure secrets & API keys (interactive wizard)"
+    echo "  18) Setup MCP configuration only"
+    echo "  19) Verify installation"
+    echo "  20) Exit"
     echo ""
 }
 
@@ -598,32 +887,42 @@ show_menu() {
 main() {
     echo ""
     echo -e "${CYAN}${BOLD}  AI Evolution Stack${NC}"
-    echo -e "  The Ultimate Local-First AI Toolkit"
-    echo -e "  30+ tools. 15 categories. One script."
+    echo -e "  The Definitive Local-First AI Toolkit"
+    echo -e "  60+ tools. 22 categories. One script."
     echo ""
 
     # Handle CLI flags
     case "${1:-}" in
-        --everything|-e)  check_dependencies; install_everything; exit 0 ;;
-        --core|-c)        check_dependencies; install_core; exit 0 ;;
-        --memory|-m)      check_dependencies; install_memory_layer; exit 0 ;;
-        --web|-w)         check_dependencies; install_web_browser; exit 0 ;;
-        --database|-d)    check_dependencies; install_database; exit 0 ;;
-        --agents|-a)      check_dependencies; install_agent_frameworks; exit 0 ;;
-        --inference|-i)   check_dependencies; install_local_inference; exit 0 ;;
-        --mcp)            setup_mcp; exit 0 ;;
-        --verify|-v)      verify_installation; exit 0 ;;
+        --everything|-e)    check_dependencies; install_everything; exit 0 ;;
+        --core|-c)          check_dependencies; install_core; exit 0 ;;
+        --memory|-m)        check_dependencies; install_memory_layer; install_advanced_memory; exit 0 ;;
+        --web|-w)           check_dependencies; install_web_browser; exit 0 ;;
+        --database|-d)      check_dependencies; install_database; exit 0 ;;
+        --agents|-a)        check_dependencies; install_agent_frameworks; exit 0 ;;
+        --hermes)           check_dependencies; install_hermes_ecosystem; exit 0 ;;
+        --inference|-i)     check_dependencies; install_local_inference; exit 0 ;;
+        --capabilities)     check_dependencies; install_capabilities; exit 0 ;;
+        --orchestration)    check_dependencies; install_orchestration; exit 0 ;;
+        --observability)    check_dependencies; install_observability; install_evaluation; install_guardrails; exit 0 ;;
+        --configure)        configure_secrets; exit 0 ;;
+        --mcp)              setup_mcp; exit 0 ;;
+        --verify|-v)        verify_installation; exit 0 ;;
         --help|-h)
             echo "Usage: $0 [OPTION]"
             echo ""
             echo "Options:"
-            echo "  --everything, -e    Install all 30+ tools"
+            echo "  --everything, -e    Install all 60+ tools"
             echo "  --core, -c          Memory + context + code search"
-            echo "  --memory, -m        Memory layer only"
+            echo "  --memory, -m        All 10 memory systems"
             echo "  --web, -w           Web & browser tools"
             echo "  --database, -d      Database tools"
             echo "  --agents, -a        Agent frameworks"
+            echo "  --hermes            Full Hermes ecosystem"
             echo "  --inference, -i     Local inference (Ollama, LocalAI)"
+            echo "  --capabilities      Skills, code exec, voice, browser"
+            echo "  --orchestration     LangGraph, Temporal, A2A"
+            echo "  --observability     Monitoring, eval, guardrails"
+            echo "  --configure         Interactive API key & secret setup"
             echo "  --mcp               Setup MCP configuration only"
             echo "  --verify, -v        Check what's installed"
             echo "  --help, -h          Show this help"
@@ -636,22 +935,29 @@ main() {
 
     while true; do
         show_menu
-        read -p "  Enter choice (1-13): " CHOICE
+        read -p "  Enter choice (1-20): " CHOICE
 
         case $CHOICE in
             1)  install_everything; break ;;
             2)  install_core; break ;;
             3)  install_memory_layer; break ;;
-            4)  install_project_context; break ;;
-            5)  install_web_browser; break ;;
-            6)  install_database; break ;;
-            7)  install_git_tools; break ;;
-            8)  install_personal_evolution; break ;;
-            9)  install_local_inference; break ;;
-            10) install_agent_frameworks; break ;;
-            11) setup_mcp; break ;;
-            12) verify_installation; continue ;;
-            13) log_info "Exiting..."; exit 0 ;;
+            4)  install_advanced_memory; break ;;
+            5)  install_project_context; break ;;
+            6)  install_local_inference; break ;;
+            7)  install_web_browser; break ;;
+            8)  install_database; break ;;
+            9)  install_git_tools; break ;;
+            10) install_capabilities; break ;;
+            11) install_agent_frameworks; break ;;
+            12) install_hermes_ecosystem; break ;;
+            13) install_orchestration; break ;;
+            14) install_evaluation; break ;;
+            15) install_guardrails; break ;;
+            16) install_observability; break ;;
+            17) configure_secrets; break ;;
+            18) setup_mcp; break ;;
+            19) verify_installation; continue ;;
+            20) log_info "Exiting..."; exit 0 ;;
             *)  log_error "Invalid choice" ;;
         esac
     done
@@ -660,9 +966,9 @@ main() {
     echo -e "${GREEN}${BOLD}  Installation Complete!${NC}"
     echo ""
     echo "  Next steps:"
-    echo "  1. Restart Cursor / Claude Code"
-    echo "  2. Check MCP servers: claude mcp list"
-    echo "  3. Run 'mex init' in your projects"
+    echo "  1. Run ./install.sh --configure  (set up API keys)"
+    echo "  2. Restart Cursor / Claude Code"
+    echo "  3. Check MCP servers: claude mcp list"
     echo "  4. Try: ollama run qwen2.5-coder:7b"
     echo ""
     echo "  Docs: https://github.com/Yousifus/ai-evolution-stack"
