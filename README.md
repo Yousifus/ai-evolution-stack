@@ -387,9 +387,30 @@ Secure environments for agents to write and run code.
 
 ### 19. Voice & Audio
 
+#### Speech-to-Text (STT / Hearing)
+
+| Tool | Install | What It Does |
+|------|---------|-------------|
+| **faster-whisper** | `pip install faster-whisper` | 4x faster than OpenAI Whisper. CTranslate2 backend. CPU-friendly. |
+| **whisper-mcp** | `pip install whisper-mcp` | MCP server for Claude Code — transcribe audio files locally via whisper.cpp |
+| **Fast-Whisper-MCP** | [GitHub](https://github.com/BigUncle/Fast-Whisper-MCP-Server) | High-performance MCP server based on faster-whisper |
+| **whisper-live** | `pip install whisper-live` | Real-time streaming transcription. Speak and see text instantly. |
+
+#### Text-to-Speech (TTS / Speaking)
+
+| Tool | Install | What It Does |
+|------|---------|-------------|
+| **Kokoro** | `pip install kokoro` | 82M params, 54 voices, 8 languages. ~90x realtime on consumer GPU. High quality. |
+| **claude-tts-mcp** | [GitHub](https://github.com/mitchthestonky/claude-tts-mcp) | Kokoro-based MCP for Claude Code. Free, offline, no API keys. |
+| **Coqui TTS** | `pip install coqui-tts` | Voice cloning with 6-second sample. XTTS v2. 16 languages. |
+| **Bark** | `pip install suno-bark` | Expressive TTS — laughter, music, sound effects. Suno AI. |
+
+#### Full Voice Pipelines
+
 | Tool | Install | What It Does |
 |------|---------|-------------|
 | **Pipecat** | `pip install pipecat-ai` | Real-time voice pipeline: STT + LLM + TTS (<1s latency) |
+| **voice-mcp** | [GitHub](https://github.com/jochiang/voice-mcp) | Combined STT (Whisper) + TTS (Supertonic) MCP for Claude Code |
 | **Hermes Voice** | `pip install "hermes-agent[voice]"` | Voice support built into Hermes Agent |
 
 ---

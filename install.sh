@@ -486,18 +486,41 @@ install_open_interpreter() {
     safe_pip_install "open-interpreter"
 }
 
-install_pipecat() {
-    log_info "Installing Pipecat (real-time voice pipeline)..."
-    safe_pip_install "pipecat-ai"
-}
-
 install_capabilities() {
-    log_header "Agent Capabilities (skills, execution, voice, browser)"
+    log_header "Agent Capabilities (skills, execution, browser)"
     install_composio
     install_browser_use
     install_e2b
     install_open_interpreter
-    install_pipecat
+}
+
+# ============================================
+# VOICE & AUDIO
+# ============================================
+
+install_voice() {
+    log_header "Voice & Audio (STT + TTS)"
+
+    # STT (Speech-to-Text)
+    log_info "Installing faster-whisper (4x faster than OpenAI Whisper, CPU-friendly)..."
+    safe_pip_install "faster-whisper"
+
+    log_info "Installing whisper-live (real-time streaming transcription)..."
+    safe_pip_install "whisper-live"
+
+    # TTS (Text-to-Speech)
+    log_info "Installing Kokoro (82M params, 54 voices, 8 languages, high quality)..."
+    safe_pip_install "kokoro"
+
+    log_info "Installing Coqui TTS (voice cloning with 6-second sample, XTTS v2)..."
+    safe_pip_install "coqui-tts"
+
+    # Full pipeline
+    log_info "Installing Pipecat (real-time voice pipeline: STT + LLM + TTS)..."
+    safe_pip_install "pipecat-ai"
+
+    log_success "Voice & Audio tools installed"
+    log_info "MCP servers available: whisper-mcp, claude-tts-mcp, voice-mcp (see README)"
 }
 
 # ============================================
@@ -971,6 +994,7 @@ install_everything() {
     install_local_inference
     install_agent_frameworks
     install_capabilities
+    install_voice
     install_orchestration
     install_evaluation
     install_guardrails
@@ -1020,23 +1044,24 @@ show_menu() {
     echo "  7)  Web & browser (fetch, playwright, brave, browser-use)"
     echo "  8)  Database (sqlite, postgres)"
     echo "  9)  Git & GitHub"
-    echo "  10) Agent capabilities (composio, e2b, voice, browser-use)"
+    echo "  10) Agent capabilities (composio, e2b, browser-use)"
+    echo "  11) Voice & audio (whisper, kokoro, coqui, pipecat)"
     echo ""
     echo "  -- Agents --"
-    echo "  11) Agent frameworks (hermes, crewai, smolagents, agno)"
-    echo "  12) Hermes ecosystem (self-evolution, CCC, workspace, skills)"
-    echo "  13) Orchestration (langgraph, temporal, a2a)"
+    echo "  12) Agent frameworks (hermes, crewai, smolagents, agno)"
+    echo "  13) Hermes ecosystem (self-evolution, CCC, workspace, skills)"
+    echo "  14) Orchestration (langgraph, temporal, a2a)"
     echo ""
     echo "  -- Quality --"
-    echo "  14) Evaluation (deepeval, inspect-ai)"
-    echo "  15) Guardrails (nemo, llamafirewall)"
-    echo "  16) Observability (agentops, phoenix, langfuse)"
+    echo "  15) Evaluation (deepeval, inspect-ai)"
+    echo "  16) Guardrails (nemo, llamafirewall)"
+    echo "  17) Observability (agentops, phoenix, langfuse)"
     echo ""
     echo "  -- Config --"
-    echo "  17) Configure secrets & API keys (interactive wizard)"
-    echo "  18) Setup MCP configuration only"
-    echo "  19) Verify installation"
-    echo "  20) Exit"
+    echo "  18) Configure secrets & API keys (interactive wizard)"
+    echo "  19) Setup MCP configuration only"
+    echo "  20) Verify installation"
+    echo "  21) Exit"
     echo ""
 }
 
@@ -1062,6 +1087,7 @@ main() {
         --hermes)           check_dependencies; install_hermes_ecosystem; exit 0 ;;
         --inference|-i)     check_dependencies; install_local_inference; exit 0 ;;
         --capabilities)     check_dependencies; install_capabilities; exit 0 ;;
+        --voice)            check_dependencies; install_voice; exit 0 ;;
         --orchestration)    check_dependencies; install_orchestration; exit 0 ;;
         --observability)    check_dependencies; install_observability; install_evaluation; install_guardrails; exit 0 ;;
         --rag)              check_dependencies; install_rag; install_ml_pipeline; exit 0 ;;
@@ -1099,7 +1125,7 @@ main() {
 
     while true; do
         show_menu
-        read -p "  Enter choice (1-20): " CHOICE
+        read -p "  Enter choice (1-21): " CHOICE
 
         case $CHOICE in
             1)  install_everything; break ;;
@@ -1112,16 +1138,17 @@ main() {
             8)  install_database; break ;;
             9)  install_git_tools; break ;;
             10) install_capabilities; break ;;
-            11) install_agent_frameworks; break ;;
-            12) install_hermes_ecosystem; break ;;
-            13) install_orchestration; break ;;
-            14) install_evaluation; break ;;
-            15) install_guardrails; break ;;
-            16) install_observability; break ;;
-            17) configure_secrets; break ;;
-            18) setup_mcp; break ;;
-            19) verify_installation; continue ;;
-            20) log_info "Exiting..."; exit 0 ;;
+            11) install_voice; break ;;
+            12) install_agent_frameworks; break ;;
+            13) install_hermes_ecosystem; break ;;
+            14) install_orchestration; break ;;
+            15) install_evaluation; break ;;
+            16) install_guardrails; break ;;
+            17) install_observability; break ;;
+            18) configure_secrets; break ;;
+            19) setup_mcp; break ;;
+            20) verify_installation; continue ;;
+            21) log_info "Exiting..."; exit 0 ;;
             *)  log_error "Invalid choice" ;;
         esac
     done

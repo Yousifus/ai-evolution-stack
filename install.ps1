@@ -12,6 +12,7 @@ param(
     [switch]$Hermes,
     [switch]$Inference,
     [switch]$Capabilities,
+    [switch]$Voice,
     [switch]$Orchestration,
     [switch]$Observability,
     [switch]$Configure,
@@ -325,12 +326,40 @@ function Install-AdvancedMemory {
 # ============================================
 
 function Install-Capabilities {
-    Write-Header "Agent Capabilities"
+    Write-Header "Agent Capabilities (skills, execution, browser)"
     Safe-PipInstall "composio-core"
     Safe-PipInstall "browser-use"
     Safe-PipInstall "e2b-code-interpreter"
     Safe-PipInstall "open-interpreter"
+}
+
+# ============================================
+# VOICE & AUDIO
+# ============================================
+
+function Install-Voice {
+    Write-Header "Voice & Audio (STT + TTS)"
+
+    # STT (Speech-to-Text)
+    Write-Info "Installing faster-whisper (4x faster than OpenAI Whisper, CPU-friendly)..."
+    Safe-PipInstall "faster-whisper"
+
+    Write-Info "Installing whisper-live (real-time streaming transcription)..."
+    Safe-PipInstall "whisper-live"
+
+    # TTS (Text-to-Speech)
+    Write-Info "Installing Kokoro (82M params, 54 voices, 8 languages, high quality)..."
+    Safe-PipInstall "kokoro"
+
+    Write-Info "Installing Coqui TTS (voice cloning with 6-second sample, XTTS v2)..."
+    Safe-PipInstall "coqui-tts"
+
+    # Full pipeline
+    Write-Info "Installing Pipecat (real-time voice pipeline: STT + LLM + TTS)..."
     Safe-PipInstall "pipecat-ai"
+
+    Write-Success "Voice & Audio tools installed"
+    Write-Info "MCP servers available: whisper-mcp, claude-tts-mcp, voice-mcp (see README)"
 }
 
 # ============================================
@@ -574,6 +603,7 @@ function Install-Everything {
     Install-LocalInference
     Install-AgentFrameworks
     Install-Capabilities
+    Install-Voice
     Install-Orchestration
     Install-Evaluation
     Install-Guardrails
@@ -613,21 +643,22 @@ function Show-Menu {
     Write-Host "  7)  Web & browser"
     Write-Host "  8)  Database (sqlite, postgres)"
     Write-Host "  9)  Git & GitHub"
-    Write-Host "  10) Agent capabilities (composio, e2b, voice, browser-use)"
+    Write-Host "  10) Agent capabilities (composio, e2b, browser-use)"
+    Write-Host "  11) Voice & audio (whisper, kokoro, coqui, pipecat)"
     Write-Host ""
     Write-Host "  -- Agents --"
-    Write-Host "  11) Agent frameworks (hermes, crewai, claude-flow, smolagents)"
-    Write-Host "  12) Hermes ecosystem"
-    Write-Host "  13) Orchestration (langgraph, temporal)"
+    Write-Host "  12) Agent frameworks (hermes, crewai, claude-flow, smolagents)"
+    Write-Host "  13) Hermes ecosystem"
+    Write-Host "  14) Orchestration (langgraph, temporal)"
     Write-Host ""
     Write-Host "  -- Quality --"
-    Write-Host "  14) Evaluation + Guardrails + Observability"
+    Write-Host "  15) Evaluation + Guardrails + Observability"
     Write-Host ""
     Write-Host "  -- Config --"
-    Write-Host "  15) Configure secrets & API keys (interactive wizard)"
-    Write-Host "  16) Setup MCP configuration only"
-    Write-Host "  17) Verify installation"
-    Write-Host "  18) Exit"
+    Write-Host "  16) Configure secrets & API keys (interactive wizard)"
+    Write-Host "  17) Setup MCP configuration only"
+    Write-Host "  18) Verify installation"
+    Write-Host "  19) Exit"
     Write-Host ""
 }
 
@@ -668,6 +699,7 @@ function Main {
     if ($Hermes)         { Install-HermesEcosystem; return }
     if ($Inference)      { Install-LocalInference; return }
     if ($Capabilities)   { Install-Capabilities; return }
+    if ($Voice)          { Install-Voice; return }
     if ($Orchestration)  { Install-Orchestration; return }
     if ($Observability)  { Install-Observability; Install-Evaluation; Install-Guardrails; return }
     if ($Configure)      { Configure-Secrets; return }
@@ -677,7 +709,7 @@ function Main {
     # Interactive
     while ($true) {
         Show-Menu
-        $choice = Read-Host "  Enter choice (1-13)"
+        $choice = Read-Host "  Enter choice (1-19)"
 
         switch ($choice) {
             "1"  { Install-Everything; break }
@@ -690,18 +722,19 @@ function Main {
             "8"  { Install-Database; break }
             "9"  { Install-GitTools; break }
             "10" { Install-Capabilities; break }
-            "11" { Install-AgentFrameworks; break }
-            "12" { Install-HermesEcosystem; break }
-            "13" { Install-Orchestration; break }
-            "14" { Install-Evaluation; Install-Guardrails; Install-Observability; break }
-            "15" { Configure-Secrets; break }
-            "16" { Setup-MCP; break }
-            "17" { Verify-Installation; continue }
-            "18" { Write-Info "Exiting..."; exit 0 }
+            "11" { Install-Voice; break }
+            "12" { Install-AgentFrameworks; break }
+            "13" { Install-HermesEcosystem; break }
+            "14" { Install-Orchestration; break }
+            "15" { Install-Evaluation; Install-Guardrails; Install-Observability; break }
+            "16" { Configure-Secrets; break }
+            "17" { Setup-MCP; break }
+            "18" { Verify-Installation; continue }
+            "19" { Write-Info "Exiting..."; exit 0 }
             default { Write-Err "Invalid choice" }
         }
 
-        if ($choice -in @("1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16")) { break }
+        if ($choice -in @("1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17")) { break }
     }
 
     Write-Host ""
