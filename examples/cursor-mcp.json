@@ -14,6 +14,31 @@
     "repomix": {
       "command": "repomix",
       "args": ["--mcp"]
+    },
+    "fetch": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-fetch"]
+    },
+    "playwright": {
+      "command": "npx",
+      "args": ["@playwright/mcp@latest"]
+    },
+    "brave-search": {
+      "command": "npx",
+      "args": ["-y", "@brave/mcp-server"],
+      "env": { "BRAVE_API_KEY": "YOUR_KEY" }
+    },
+    "desktop-commander": {
+      "command": "npx",
+      "args": ["-y", "@wonderwhy-er/desktop-commander"]
+    },
+    "sqlite": {
+      "command": "uvx",
+      "args": ["mcp-server-sqlite", "--db-path", "./data.db"]
+    },
+    "git": {
+      "command": "uvx",
+      "args": ["mcp-server-git"]
     }
   }
 }

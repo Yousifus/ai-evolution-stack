@@ -1,575 +1,524 @@
-# 🧠 AI Evolution Stack
+# AI Evolution Stack
 
-> **Your Complete Local-First AI Memory & Context Architecture**
-> 
-> Everything runs on your device. No cloud. No API keys required (mostly). Full privacy.
+> **The Ultimate Local-First AI Toolkit for Developers**
+>
+> 30+ curated tools across 15 categories. At least 2 options per niche.
+> One script installs everything. No cloud required.
 
 ---
 
-## 📋 Quick Navigation
+## Quick Navigation
 
 | Section | Description |
 |---------|-------------|
-| [🎯 Your Stack Overview](#-your-stack-overview) | What you have vs what to add |
-| [🔧 Core Tools](#-core-tools) | Essential memory & context systems |
-| [⚡ Quick Install](#-quick-install) | One-liners to get everything |
-| [📊 Comparison Matrix](#-comparison-matrix) | Side-by-side feature comparison |
-| [🛠️ Setup Guides](#️-setup-guides) | Step-by-step for each tool |
-| [🔌 MCP Integration](#-mcp-integration) | Making everything work together |
+| [Stack Overview](#stack-overview) | Full architecture — what's included |
+| [Quick Install](#quick-install) | One command to get everything |
+| [Tool Catalog](#tool-catalog) | Every tool by category with comparisons |
+| [MCP Integration](#mcp-integration) | Unified config for Claude Code, Cursor, LM Studio |
+| [Setup Guides](#setup-guides) | Step-by-step per tool |
+| [Troubleshooting](#troubleshooting) | Common issues and fixes |
 
 ---
 
-## 🎯 Your Stack Overview
-
-### ✅ What You Already Have
-- **Cursor AI** - Primary IDE with AI
-- **Claude Code** - Secondary AI assistant  
-- **Cline** - Alternative AI agent
-- **Augment** - AI coding assistant
-- **Warp** - AI-powered terminal
-
-### 🚀 What This Repo Adds
+## Stack Overview
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                    LOCAL AI EVOLUTION STACK                  │
-├─────────────────────────────────────────────────────────────┤
-│  MEMORY LAYER (Cross-Project)                                │
-│  ├── MemPalace      → Conversation history (Claude Code)    │
-│  ├── agentmemory    → Universal memory for ALL agents       │
-│  ├── Basic Memory   → Human-readable knowledge graph        │
-│  └── Hindsight      → Knowledge graph + semantic search     │
-├─────────────────────────────────────────────────────────────┤
-│  PROJECT CONTEXT (Per-Project)                               │
-│  ├── mex            → Living documentation scaffold         │
-│  ├── Repomix        → Full codebase packaging               │
-│  └── Claude Context → Hybrid code search                    │
-├─────────────────────────────────────────────────────────────┤
-│  PERSONAL EVOLUTION (Learns You)                             │
-│  └── homunculus     → Pattern learning & instinct evolution │
-├─────────────────────────────────────────────────────────────┤
-│  KNOWLEDGE LAYER (Current Docs)                              │
-│  └── Context7       → Up-to-date library documentation      │
-├─────────────────────────────────────────────────────────────┤
-│  LOCAL INFERENCE (Optional)                                  │
-│  └── LM Studio      → Run models locally (Hermes agent)     │
-└─────────────────────────────────────────────────────────────┘
++=====================================================================+
+|                     AI EVOLUTION STACK v2                            |
+|                  30+ tools across 15 categories                     |
++=====================================================================+
+|                                                                     |
+|  MEMORY LAYER (Cross-Session, Cross-Project)                        |
+|  +-- agentmemory .......... Universal memory, 43 MCP tools          |
+|  +-- Basic Memory ......... Human-readable Markdown knowledge graph |
+|  +-- MemPalace ............ Conversation history (Claude Code)      |
+|  +-- Hindsight ............ Knowledge graph + semantic search       |
+|                                                                     |
+|  PROJECT CONTEXT (Per-Project)                                      |
+|  +-- Repomix .............. Full codebase packaging for AI          |
+|  +-- mex .................. Living documentation scaffold           |
+|  +-- Claude Context ....... Hybrid code search                      |
+|                                                                     |
+|  CODE SEARCH & NAVIGATION                                           |
+|  +-- mcp-ragex ............ Hybrid: RAG + AST + regex search        |
+|  +-- Repomix .............. Codebase packaging (dual-use)           |
+|                                                                     |
+|  WEB & BROWSER                                                      |
+|  +-- Fetch MCP ............ URL fetching, HTML-to-Markdown          |
+|  +-- Playwright MCP ....... Full browser automation (Microsoft)     |
+|  +-- Brave Search MCP ..... Web, image, news, local search          |
+|                                                                     |
+|  FILE SYSTEM                                                        |
+|  +-- Filesystem MCP ....... Official sandboxed file access          |
+|  +-- Desktop Commander .... File ops + terminal + diff editing      |
+|                                                                     |
+|  DATABASE                                                           |
+|  +-- SQLite MCP ........... Local SQLite database access            |
+|  +-- Postgres MCP ......... PostgreSQL read access + introspection  |
+|                                                                     |
+|  GIT & GITHUB                                                       |
+|  +-- Git MCP .............. Local repo: history, diffs, branches    |
+|  +-- GitHub MCP ........... Official: PRs, issues, code search      |
+|                                                                     |
+|  TERMINAL & SHELL                                                   |
+|  +-- Desktop Commander .... Terminal control (dual-use with FS)     |
+|  +-- mcp-shell-server ..... Secure whitelisted command execution    |
+|                                                                     |
+|  IMAGE & VISION                                                     |
+|  +-- screenshot MCP ....... Screen capture + content processing     |
+|  +-- mcp-vision ........... Camera/screenshot + Ollama vision       |
+|                                                                     |
+|  TASK & PROJECT MANAGEMENT                                          |
+|  +-- Notion MCP ........... Official Notion: pages, databases       |
+|  +-- Jira MCP ............. Jira Cloud: tickets, projects, JQL      |
+|                                                                     |
+|  SECURITY & SECRETS                                                 |
+|  +-- Vault MCP ............ HashiCorp Vault integration             |
+|  +-- mcp-secrets-vault .... Local mini-vault, AI never sees keys    |
+|                                                                     |
+|  KNOWLEDGE & DOCS                                                   |
+|  +-- Context7 ............. Up-to-date library documentation        |
+|                                                                     |
+|  PERSONAL EVOLUTION                                                 |
+|  +-- homunculus ........... Pattern learning, instinct evolution     |
+|  +-- Hermes Agent ......... Self-improving agent, learns skills     |
+|                                                                     |
+|  LOCAL INFERENCE                                                    |
+|  +-- LM Studio ............ GUI-based local model runner            |
+|  +-- Ollama ............... CLI-based, 166k stars, massive ecosystem |
+|  +-- LocalAI .............. Multi-modal OpenAI API drop-in          |
+|                                                                     |
+|  AGENT FRAMEWORKS                                                   |
+|  +-- Hermes Agent ......... Self-improving agent (NousResearch)     |
+|  +-- crewAI ............... Multi-agent orchestration (45k stars)   |
+|                                                                     |
++=====================================================================+
 ```
 
 ---
 
-## ⚡ Quick Install
+## Quick Install
 
-### 🖥️ macOS / Linux
+### macOS / Linux
 
 ```bash
-# Clone this repo
-git clone https://github.com/YOUR_USERNAME/ai-evolution-stack.git
+git clone https://github.com/Yousifus/ai-evolution-stack.git
 cd ai-evolution-stack
-
-# Run the all-in-one installer
 chmod +x install.sh
 ./install.sh
 ```
 
-### 🪟 Windows (PowerShell)
+### Windows (PowerShell)
 
 ```powershell
-# Clone this repo
-git clone https://github.com/YOUR_USERNAME/ai-evolution-stack.git
+git clone https://github.com/Yousifus/ai-evolution-stack.git
 cd ai-evolution-stack
-
-# Run the installer
 .\install.ps1
 ```
 
-### 📦 Individual Install Commands
+The installer is interactive — choose "Everything" or pick categories individually.
 
-| Tool | Install Command | Time |
-|------|-----------------|------|
-| **MemPalace** | `pip install mempalace` | 30s |
-| **agentmemory** | `npx -y @agentmemory/agentmemory` | 1m |
-| **Basic Memory** | `uvx basic-memory mcp` | 30s |
-| **Hindsight** | `pip install hindsight-server` | 1m |
-| **mex** | `npx -g mex-cli` | 30s |
-| **Repomix** | `npx -g repomix` | 30s |
-| **homunculus** | See [setup guide](#homunculus) | 5m |
-| **Context7** | Via Cursor/Claude plugins | 1m |
-| **LM Studio** | Download from lmstudio.ai | 5m |
+### Install Flags
 
----
+```bash
+# macOS/Linux
+./install.sh --everything       # Install all tools
+./install.sh --core             # Memory + Context + MCP config
+./install.sh --memory           # Memory layer only
+./install.sh --web              # Web/Browser tools only
+./install.sh --database         # Database tools only
+./install.sh --agents           # Agent frameworks only
+./install.sh --inference        # Local inference (Ollama + LocalAI)
+./install.sh --verify           # Check what's installed
 
-## 📊 Comparison Matrix
-
-### Memory Systems
-
-| Feature | MemPalace | agentmemory | Basic Memory | Hindsight |
-|---------|-----------|-------------|--------------|-----------|
-| **Local-First** | ✅ | ✅ | ✅ | ✅ |
-| **Works with Cursor** | ❌ | ✅ | ✅ | ✅ |
-| **Works with Claude Code** | ✅ | ✅ | ✅ | ✅ |
-| **Works with Cline** | ❌ | ✅ | ✅ | ✅ |
-| **Works with LM Studio** | ❌ | ✅ | ✅ | ✅ |
-| **Storage** | ChromaDB | ChromaDB | Markdown files | SQLite |
-| **Search** | Vector | Vector + Time | Vector + Time | Graph + Vector |
-| **Token Reduction** | 92% | 92% | ~60% | ~70% |
-| **Recall Accuracy** | 96.6% | 95.2% | ~85% | ~90% |
-| **MCP Tools** | 19 | 43 | 12 | 8 |
-| **Auto-Capture** | Manual | ✅ | ✅ | ✅ |
-| **Export/Import** | ✅ | ✅ | ✅ | ✅ |
-| **Setup Complexity** | Medium | Low | Low | Low |
-
-### Project Context Tools
-
-| Feature | mex | Repomix | Claude Context |
-|---------|-----|---------|----------------|
-| **Local-First** | ✅ | ✅ | ✅ |
-| **Works with Cursor** | ✅ | ✅ | ✅ |
-| **Works with Claude Code** | ✅ | ✅ | ✅ |
-| **Drift Detection** | ✅ | ❌ | ❌ |
-| **Code Search** | ❌ | ❌ | ✅ |
-| **Token Reduction** | ~60% | ~80% | ~40% |
-| **MCP Integration** | ❌ | ✅ | ✅ |
-| **Setup Complexity** | Low | Low | Medium |
-
-### Personal Evolution
-
-| Feature | homunculus | Context7 |
-|---------|------------|----------|
-| **Local-First** | ✅ | ✅ |
-| **Works with Cursor** | ❌ | ✅ |
-| **Works with Claude Code** | ✅ | ✅ |
-| **Pattern Learning** | ✅ | ❌ |
-| **Library Docs** | ❌ | ✅ |
-| **Evolution Path** | Instincts→Skills→Agents | Static |
-| **Setup Complexity** | Medium | Low |
+# Windows
+.\install.ps1 -Everything
+.\install.ps1 -Core
+.\install.ps1 -Verify
+```
 
 ---
 
-## 🛠️ Setup Guides
+## Tool Catalog
 
-### 1. MemPalace (Claude Code Only)
+### 1. Memory Layer
+
+Cross-session, cross-project memory systems that remember your work.
+
+| Feature | agentmemory | Basic Memory | MemPalace | Hindsight |
+|---------|-------------|--------------|-----------|-----------|
+| **Install** | `npm i -g @agentmemory/agentmemory` | `pip install basic-memory` | `pip install mempalace` | `pip install hindsight-server` |
+| **Works with Cursor** | Yes | Yes | No | Yes |
+| **Works with Claude Code** | Yes | Yes | Yes | Yes |
+| **Works with LM Studio** | Yes | Yes | No | Yes |
+| **Storage** | ChromaDB | Markdown files | ChromaDB | SQLite |
+| **Search** | Vector + Time | Vector + Time | Vector | Graph + Vector |
+| **MCP Tools** | 43 | 12 | 19 | 8 |
+| **Auto-Capture** | Yes | Yes | Manual | Yes |
+| **Best For** | Universal memory across all tools | Human-readable, git-friendly memory | Claude Code conversation recall | Knowledge graphs |
+
+### 2. Project Context
+
+Per-project tools that give AI deep understanding of your codebase.
+
+| Feature | Repomix | mex | Claude Context |
+|---------|---------|-----|----------------|
+| **Install** | `npm i -g repomix` | `npm i -g mex-cli` | Via plugins |
+| **What It Does** | Packages entire codebase for AI consumption | Living docs that stay in sync with code | Hybrid code search |
+| **Token Reduction** | ~80% | ~60% | ~40% |
+| **Drift Detection** | No | Yes | No |
+| **MCP Server** | Yes | No | Yes |
+
+### 3. Code Search & Navigation
+
+| Feature | mcp-ragex | Repomix (dual-use) |
+|---------|-----------|-------------------|
+| **Install** | `pip install mcp-ragex` | `npm i -g repomix` |
+| **Search Modes** | RAG (vector) + AST (tree-sitter) + regex (ripgrep) | Full codebase packaging |
+| **Local Embeddings** | Yes | N/A |
+| **Multi-Language** | Yes | Yes |
+
+### 4. Web & Browser
+
+| Feature | Fetch MCP | Playwright MCP | Brave Search MCP |
+|---------|-----------|----------------|-------------------|
+| **Install** | `npx @modelcontextprotocol/server-fetch` | `npx @playwright/mcp@latest` | `npx @brave/mcp-server` |
+| **What It Does** | Fetches URLs, converts HTML to Markdown | Full browser automation: click, fill, screenshot | Web, image, news, local search |
+| **API Key Required** | No | No | Yes (free tier) |
+| **Best For** | Reading web pages/APIs | E2E testing, form filling | Searching the internet |
+
+### 5. File System
+
+| Feature | Filesystem MCP | Desktop Commander |
+|---------|---------------|-------------------|
+| **Install** | `npx @modelcontextprotocol/server-filesystem /path` | `npx @wonderwhy-er/desktop-commander` |
+| **What It Does** | Sandboxed read/write to allowed directories | File ops + diff editing + terminal + process mgmt |
+| **Scope** | File operations only | File + Terminal + Process (all-in-one) |
+| **Best For** | Safe, minimal file access | Power users who want everything |
+
+### 6. Database
+
+| Feature | SQLite MCP | Postgres MCP |
+|---------|-----------|--------------|
+| **Install** | `uvx mcp-server-sqlite --db-path ./db.sqlite` | `npx @modelcontextprotocol/server-postgres $CONN` |
+| **What It Does** | Full CRUD on SQLite databases | Read-only Postgres with schema introspection |
+| **Access Level** | Read + Write | Read-only (safe) |
+| **Best For** | Local databases, prototyping | Production DB exploration |
+
+### 7. Git & GitHub
+
+| Feature | Git MCP | GitHub MCP |
+|---------|---------|------------|
+| **Install** | `uvx mcp-server-git` | See [setup guide](#github-mcp) |
+| **What It Does** | Local repo: log, diff, blame, branches | PRs, issues, code search, actions |
+| **Scope** | Local git operations | GitHub API (cloud) |
+| **API Key Required** | No | Yes (PAT) |
+
+### 8. Terminal & Shell
+
+| Feature | Desktop Commander | mcp-shell-server |
+|---------|-------------------|-----------------|
+| **Install** | `npx @wonderwhy-er/desktop-commander` | `pip install mcp-shell-server` |
+| **What It Does** | Full terminal control + file system | Whitelisted command execution |
+| **Security** | Broad access | Restricted to allowed commands |
+| **Best For** | Power users | Security-conscious setups |
+
+### 9. Image & Vision
+
+| Feature | Screenshot MCP | mcp-vision |
+|---------|---------------|------------|
+| **Install** | `pip install screenshot-mcp-server` | See [repo](https://github.com/MikeyBeez/mcp-vision) |
+| **What It Does** | Screen capture + content processing | Camera/screenshot + Ollama vision analysis |
+| **Cloud Required** | No | No (uses Ollama locally) |
+| **Best For** | Quick screenshots for AI | Full local vision pipeline |
+
+### 10. Task & Project Management
+
+| Feature | Notion MCP | Jira MCP |
+|---------|-----------|----------|
+| **Install** | Official Notion integration | `pip install jira-mcp-server` |
+| **What It Does** | Pages, databases, search, content management | Tickets, projects, JQL search |
+| **Best For** | Teams using Notion | Teams using Jira/Atlassian |
+
+### 11. Security & Secrets
+
+| Feature | Vault MCP | mcp-secrets-vault |
+|---------|----------|-------------------|
+| **Install** | Via HashiCorp | `pip install mcp-secrets-vault` |
+| **What It Does** | HashiCorp Vault: enterprise secret management | Local mini-vault, AI calls APIs without seeing keys |
+| **Scope** | Enterprise | Individual / small team |
+| **Best For** | Production environments | Dev workflows, personal API keys |
+
+### 12. Knowledge & Docs
+
+| Tool | Install | What It Does |
+|------|---------|-------------|
+| **Context7** | Via Cursor/Claude plugins | Always up-to-date library documentation |
+
+### 13. Personal Evolution
+
+| Feature | homunculus | Hermes Agent |
+|---------|-----------|--------------|
+| **Install** | `git clone` + `pip install -e .` | `curl` install script |
+| **What It Does** | Learns YOUR coding patterns over time | Self-improving agent that creates skills from experience |
+| **Evolution Path** | Instincts -> Skills -> Agents | Learning loop: observe -> learn -> improve |
+| **MCP Support** | No | Yes (both client and server) |
+| **Best For** | AI that adapts to your style | Autonomous agent that grows with you |
+
+### 14. Local Inference
+
+| Feature | LM Studio | Ollama | LocalAI |
+|---------|-----------|--------|---------|
+| **Install** | Download from lmstudio.ai | `curl -fsSL https://ollama.ai/install.sh \| sh` | Docker / binary |
+| **Interface** | GUI | CLI + REST API | REST API (OpenAI-compatible) |
+| **Model Format** | GGUF | GGUF (auto-pull) | Multi-backend |
+| **Multi-Modal** | Text + Vision | Text + Vision | Text + Vision + Audio + Embeddings |
+| **GitHub Stars** | -- | 166k | 30k+ |
+| **Best For** | Beginners, visual management | Most popular, huge ecosystem | Advanced multi-modal pipelines |
+
+### 15. Agent Frameworks
+
+| Feature | Hermes Agent | crewAI |
+|---------|-------------|--------|
+| **Install** | `curl` install script | `pip install crewai` |
+| **What It Does** | Self-improving agent with persistent memory | Multi-agent orchestration with roles |
+| **MCP Support** | Native (client + server) | Native |
+| **Self-Improving** | Yes (learning loop) | No |
+| **Multi-Agent** | Single agent | Yes (crews of agents) |
+| **GitHub Stars** | 8.7k | 45.9k |
+| **Best For** | Personal AI assistant that learns | Orchestrating teams of specialized agents |
+
+---
+
+## MCP Integration
+
+### Complete Claude Code Config
+
+Copy `mcp.json` from this repo to `~/.claude/mcp.json`, or run:
+
+```bash
+# macOS/Linux
+./install.sh --mcp
+
+# Windows
+.\install.ps1 -MCP
+```
+
+This configures all MCP servers for Claude Code, Cursor, and LM Studio.
+
+### What Gets Configured
+
+| MCP Server | Category | Install Method |
+|---|---|---|
+| agentmemory | Memory | npx |
+| basic-memory | Memory | uvx/pip |
+| hindsight | Memory | pip |
+| mempalace | Memory | pip |
+| repomix | Context | npx |
+| mcp-ragex | Code Search | pip |
+| fetch | Web | npx |
+| playwright | Web/Browser | npx |
+| brave-search | Web/Search | npx |
+| filesystem | File System | npx |
+| desktop-commander | File + Terminal | npx |
+| sqlite | Database | uvx |
+| postgres | Database | npx |
+| git | Git | uvx |
+| github | GitHub | HTTP |
+| mcp-shell-server | Terminal | pip |
+| screenshot | Vision | pip |
+| notion | Task Mgmt | HTTP |
+| secrets-vault | Security | pip |
+| hermes | Agent | pip |
+
+---
+
+## Setup Guides
+
+### Hermes Agent
+
+```bash
+# Install (macOS/Linux)
+curl -fsSL https://raw.githubusercontent.com/NousResearch/hermes-agent/main/scripts/install.sh | bash
+source ~/.bashrc
+
+# Configure provider (use local Ollama or LM Studio)
+hermes config set provider.custom.base_url http://localhost:11434/v1
+
+# Or use Claude/OpenAI
+hermes config set provider anthropic
+hermes config set provider.anthropic.api_key YOUR_KEY
+
+# Run as MCP server (exposes tools to Claude Code)
+hermes mcp serve
+
+# Add to Claude Code mcp.json
+# {
+#   "hermes": {
+#     "command": "hermes",
+#     "args": ["mcp", "serve"]
+#   }
+# }
+```
+
+### Ollama
 
 ```bash
 # Install
-pip install mempalace
+curl -fsSL https://ollama.ai/install.sh | sh
 
-# Initialize
-mempalace init
+# Windows: download from https://ollama.com/download
 
-# Add to Claude Code MCP
-# Edit: ~/.claude/mcp.json
-{
-  "mcpServers": {
-    "mempalace": {
-      "command": "mempalace",
-      "args": ["mcp"]
-    }
-  }
-}
+# Pull recommended models
+ollama pull qwen2.5-coder:32b    # Best for coding
+ollama pull llama3.3:70b          # General purpose
+ollama pull nomic-embed-text      # Embeddings
 
-# Import existing conversations
-mempalace import --source claude --file ~/Downloads/conversations.json
+# Ollama runs as a REST API on http://localhost:11434
+# Compatible with any OpenAI-client tool
 ```
 
-**Verdict:** Best for Claude Code users who want to remember everything.
-
----
-
-### 2. agentmemory (Universal - Recommended)
+### Brave Search MCP
 
 ```bash
-# Install globally
-npm install -g @agentmemory/agentmemory
-
-# Or run without installing
-npx -y @agentmemory/agentmemory
-
-# Add to Claude Code
-# Edit: ~/.claude/mcp.json
-{
-  "mcpServers": {
-    "agentmemory": {
-      "command": "npx",
-      "args": ["-y", "@agentmemory/agentmemory"]
-    }
-  }
-}
-
-# Add to Cursor
-# Settings → MCP → Add Server → Command: npx -y @agentmemory/agentmemory
-
-# Test
-agentmemory status
+# Get free API key: https://brave.com/search/api/
+# Then configure:
+# In mcp.json:
+# {
+#   "brave-search": {
+#     "command": "npx",
+#     "args": ["-y", "@brave/mcp-server"],
+#     "env": {
+#       "BRAVE_API_KEY": "your-key-here"
+#     }
+#   }
+# }
 ```
 
-**Verdict:** Best universal memory that works across ALL your AI tools.
-
----
-
-### 3. Basic Memory (Human-Readable)
+### GitHub MCP
 
 ```bash
-# Install via uv (recommended)
-uvx basic-memory mcp
-
-# Or via pip
-pip install basic-memory
-
-# Add to Claude Code
-# Edit: ~/.claude/mcp.json
-{
-  "mcpServers": {
-    "basic-memory": {
-      "command": "uvx",
-      "args": ["basic-memory", "mcp"]
-    }
-  }
-}
-
-# Initialize
-basic-memory init
-
-# Import from Claude/ChatGPT
-basic-memory import claude ~/Downloads/conversations.json
+# Generate a Personal Access Token at https://github.com/settings/tokens
+# Then add to Claude Code:
+claude mcp add github \
+  --transport http \
+  --url https://api.githubcopilot.com/mcp/ \
+  --header "Authorization: Bearer YOUR_GITHUB_PAT"
 ```
 
-**Verdict:** Best if you want to read/edit your memory as Markdown files.
+### Desktop Commander
 
----
+```bash
+# Install and auto-configure
+npx @wonderwhy-er/desktop-commander setup
 
-### 4. Hindsight (Knowledge Graph)
+# Or add manually to mcp.json:
+# {
+#   "desktop-commander": {
+#     "command": "npx",
+#     "args": ["-y", "@wonderwhy-er/desktop-commander"]
+#   }
+# }
+```
+
+### crewAI
 
 ```bash
 # Install
-pip install hindsight-server
+pip install crewai
 
-# Configure for local-only (no OpenAI)
-export HINDSIGHT_API_LLM_PROVIDER=ollama
-export HINDSIGHT_API_LLM_BASE_URL=http://localhost:11434
+# Create a crew
+crewai create crew my-research-crew
+cd my-research-crew
 
-# Or use LM Studio
-export HINDSIGHT_API_LLM_PROVIDER=custom
-export HINDSIGHT_API_LLM_BASE_URL=http://localhost:1234/v1
-
-# Start server
-hindsight-server
-
-# Add to Claude Code
-# Edit: ~/.claude/mcp.json
-{
-  "mcpServers": {
-    "hindsight": {
-      "command": "hindsight-server",
-      "env": {
-        "HINDSIGHT_API_LLM_PROVIDER": "ollama"
-      }
-    }
-  }
-}
+# crewAI has native MCP support — it auto-discovers
+# MCP servers and converts tools to LangChain format
 ```
 
-**Verdict:** Best for building a knowledge graph of your work.
+For all other tools, see the individual docs in the `docs/` folder.
 
 ---
 
-### 5. mex (Project Documentation)
-
-```bash
-# Install
-npm install -g mex-cli
-
-# Initialize in your project
-cd ~/your-project
-mex init
-
-# This creates .mex/ folder with:
-# - architecture.md
-# - conventions.md  
-# - decisions.md
-# - patterns/
-# - ROUTER.md
-
-# Enable drift detection
-mex drift --enable
-
-# Add to Cursor (creates .cursorrules)
-mex cursor-rules
-
-# Add to Claude Code (creates CLAUDE.md)
-mex claude-md
-```
-
-**Verdict:** Best for keeping project docs in sync with code.
-
----
-
-### 6. Repomix (Codebase Packaging)
-
-```bash
-# Install
-npm install -g repomix
-
-# Run as MCP server
-repomix --mcp
-
-# Or package a repo
-repomix --remote https://github.com/user/repo
-
-# Add to Claude Code
-# Edit: ~/.claude/mcp.json
-{
-  "mcpServers": {
-    "repomix": {
-      "command": "repomix",
-      "args": ["--mcp"]
-    }
-  }
-}
-```
-
-**Verdict:** Best for giving AI complete codebase context instantly.
-
----
-
-### 7. homunculus (Pattern Learning)
-
-```bash
-# Install (Claude Code plugin)
-# Currently requires manual setup
-
-git clone https://github.com/humanplane/homunculus.git
-cd homunculus
-pip install -e .
-
-# Initialize in your project
-cd ~/your-project
-homunculus init
-
-# Commands available in Claude Code:
-# /homunculus:init    - Initialize observer
-# /homunculus:status  - Check evolution progress
-# /homunculus:evolve  - Trigger evolution
-# /homunculus:export  - Export your instincts
-# /homunculus:import  - Import someone else's instincts
-```
-
-**Verdict:** Best for AI that learns YOUR coding style over time.
-
----
-
-### 8. Context7 (Library Docs)
-
-```bash
-# Via Claude Code plugin
-# In Claude Code: /plugin install context7
-
-# Or via Cursor
-# Settings → Extensions → Search "Context7"
-
-# Usage
-# In any conversation: "Use Context7 to check React 19 docs"
-```
-
-**Verdict:** Best for staying current with library APIs.
-
----
-
-### 9. LM Studio (Local Inference)
-
-```bash
-# Download from https://lmstudio.ai
-
-# Recommended models for coding:
-# - Qwen 2.5 Coder 32B (best for coding)
-# - Llama 3.3 70B (general purpose)
-# - gpt-oss 20B (good balance)
-
-# Start server
-# In LM Studio: Server → Start Server
-
-# Connect Hermes (optional)
-hermes config set provider.custom.base_url http://localhost:1234/v1
-
-# Add MCP servers
-# Edit: ~/.lmstudio/mcp.json
-{
-  "mcpServers": {
-    "agentmemory": {
-      "command": "npx",
-      "args": ["-y", "@agentmemory/agentmemory"]
-    },
-    "basic-memory": {
-      "command": "uvx",
-      "args": ["basic-memory", "mcp"]
-    }
-  }
-}
-```
-
-**Verdict:** Best for 100% local, private AI inference.
-
----
-
-## 🔌 MCP Integration
-
-### Complete MCP Configuration
-
-Create `~/.claude/mcp.json`:
-
-```json
-{
-  "mcpServers": {
-    "agentmemory": {
-      "command": "npx",
-      "args": ["-y", "@agentmemory/agentmemory"],
-      "description": "Universal memory for all AI tools"
-    },
-    "basic-memory": {
-      "command": "uvx",
-      "args": ["basic-memory", "mcp"],
-      "description": "Human-readable knowledge graph"
-    },
-    "hindsight": {
-      "command": "hindsight-server",
-      "env": {
-        "HINDSIGHT_API_LLM_PROVIDER": "ollama"
-      },
-      "description": "Knowledge graph with semantic search"
-    },
-    "repomix": {
-      "command": "repomix",
-      "args": ["--mcp"],
-      "description": "Full codebase context"
-    },
-    "mempalace": {
-      "command": "mempalace",
-      "args": ["mcp"],
-      "description": "Conversation history (Claude Code only)"
-    }
-  }
-}
-```
-
-### Cursor MCP Configuration
-
-In Cursor: `Settings → MCP → Add Server`
-
-| Name | Command | Type |
-|------|---------|------|
-| agentmemory | `npx -y @agentmemory/agentmemory` | Command |
-| basic-memory | `uvx basic-memory mcp` | Command |
-| hindsight | `hindsight-server` | Command |
-| repomix | `repomix --mcp` | Command |
-
----
-
-## 🎯 Recommended Setup for Your Workflow
-
-### Primary Setup (Cursor + Claude Code)
-
-```bash
-# 1. Install universal memory
-npm install -g @agentmemory/agentmemory
-
-# 2. Install human-readable memory
-uvx basic-memory mcp
-
-# 3. Install project docs
-npm install -g mex-cli
-
-# 4. Install codebase packager
-npm install -g repomix
-
-# 5. Configure MCP
-# Copy the mcp.json from above to ~/.claude/mcp.json
-
-# 6. Initialize mex in each project
-cd ~/your-project && mex init
-
-# 7. Install Context7 plugin in Cursor/Claude
-```
-
-### Optional: Full Local Stack
-
-```bash
-# Add local inference
-# Download LM Studio from lmstudio.ai
-
-# Add knowledge graph
-pip install hindsight-server
-
-# Add pattern learning
-git clone https://github.com/humanplane/homunculus.git
-```
-
----
-
-## 📁 Repository Structure
+## Repository Structure
 
 ```
 ai-evolution-stack/
-├── README.md                 # This file
-├── install.sh                # macOS/Linux installer
-├── install.ps1               # Windows installer
-├── mcp.json                  # Complete MCP configuration
-├── docs/
-│   ├── mempalace.md         # Detailed MemPalace guide
-│   ├── agentmemory.md       # Detailed agentmemory guide
-│   ├── basic-memory.md      # Detailed Basic Memory guide
-│   ├── hindsight.md         # Detailed Hindsight guide
-│   ├── mex.md               # Detailed mex guide
-│   ├── repomix.md           # Detailed Repomix guide
-│   ├── homunculus.md        # Detailed homunculus guide
-│   ├── context7.md          # Detailed Context7 guide
-│   └── lm-studio.md         # Detailed LM Studio guide
-├── scripts/
-│   ├── setup-mcp.sh         # MCP setup script
-│   ├── setup-mcp.ps1        # MCP setup script (Windows)
-│   └── verify-install.sh    # Verify everything is installed
-└── examples/
-    ├── cursor-mcp.json      # Cursor-specific MCP config
-    ├── claude-mcp.json      # Claude Code MCP config
-    └── lmstudio-mcp.json    # LM Studio MCP config
++-- README.md                  # This file
++-- install.sh                 # macOS/Linux installer (all tools)
++-- install.ps1                # Windows installer (all tools)
++-- mcp.json                   # Complete MCP configuration
++-- docs/
+|   +-- agentmemory.md         # agentmemory deep dive
+|   +-- basic-memory.md        # Basic Memory deep dive
+|   +-- homunculus.md          # homunculus deep dive
+|   +-- lm-studio.md          # LM Studio deep dive
+|   +-- mex.md                 # mex deep dive
+|   +-- hermes.md              # Hermes Agent guide
+|   +-- ollama.md              # Ollama guide
+|   +-- web-browser.md         # Fetch + Playwright + Brave guide
+|   +-- database.md            # SQLite + Postgres MCP guide
+|   +-- git-github.md          # Git + GitHub MCP guide
+|   +-- security.md            # Vault + secrets-vault guide
++-- examples/
+|   +-- claude-mcp.json        # Claude Code MCP config
+|   +-- cursor-mcp.json        # Cursor MCP config
+|   +-- lmstudio-mcp.json     # LM Studio MCP config
++-- scripts/
+|   +-- update-all.sh          # Update all installed tools
+|   +-- verify-install.sh      # Verify installation status
++-- .gitignore
++-- LICENSE
++-- QUICKSTART.md
 ```
 
 ---
 
-## 🔄 Update All Tools
+## Update All Tools
 
 ```bash
-# Update everything
-npm update -g @agentmemory/agentmemory mex-cli repomix
-pip install --upgrade mempalace hindsight-server basic-memory
-
-# Or use the update script
+# Run the update script
 ./scripts/update-all.sh
+
+# Or update manually
+npm update -g @agentmemory/agentmemory mex-cli repomix
+pip install --upgrade mempalace hindsight-server basic-memory crewai mcp-ragex
+ollama pull qwen2.5-coder:32b   # Updates models too
 ```
 
 ---
 
-## 🐛 Troubleshooting
+## Troubleshooting
 
 | Issue | Solution |
 |-------|----------|
-| MCP server not found | Check PATH: `echo $PATH` |
+| MCP server not found | Check PATH: `echo $PATH` or restart terminal |
 | Permission denied | `chmod +x install.sh` |
-| Port conflicts | Change ports in mcp.json |
-| Model not loading | Check LM Studio server is running |
-| Memory not persisting | Check ChromaDB/SQLite permissions |
+| Port conflicts | Change ports in mcp.json or stop conflicting services |
+| Ollama model not loading | Check `ollama serve` is running |
+| Brave Search 401 | Verify `BRAVE_API_KEY` in env |
+| GitHub MCP auth failed | Regenerate PAT with correct scopes |
+| Memory not persisting | Check ChromaDB/SQLite file permissions |
+| Windows: python3 not found | Use `python` instead of `python3` on Windows |
+| Desktop Commander hangs | Kill with `npx @wonderwhy-er/desktop-commander stop` |
 
 ---
 
-## 📜 License
+## Contributing
+
+Found a new tool? Open a PR! The goal is **2+ options per category**.
+
+When adding a tool, include:
+1. Add to the relevant category table in README
+2. Add install function to `install.sh` and `install.ps1`
+3. Add MCP config to `mcp.json` if applicable
+4. Add a doc file in `docs/` for detailed setup
+
+---
+
+## License
 
 MIT - Use however you want. Keep it local. Stay private.
 
 ---
 
-## 🤝 Contributing
-
-Found a new tool? Open a PR! Want better docs? Edit away!
-
----
-
-**Made with 💜 for the local-first AI community.**
+**Made for the local-first AI community.**

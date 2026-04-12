@@ -3,7 +3,7 @@
     "agentmemory": {
       "command": "npx",
       "args": ["-y", "@agentmemory/agentmemory"],
-      "description": "Universal memory for all AI tools - 43 MCP tools, 92% token reduction"
+      "description": "Universal memory for all AI tools — 43 MCP tools, 92% token reduction"
     },
     "basic-memory": {
       "command": "uvx",
@@ -15,17 +15,88 @@
       "env": {
         "HINDSIGHT_API_LLM_PROVIDER": "ollama"
       },
-      "description": "Knowledge graph with semantic search - learns from your work"
-    },
-    "repomix": {
-      "command": "repomix",
-      "args": ["--mcp"],
-      "description": "Full codebase context packaging - 80% token reduction"
+      "description": "Knowledge graph with semantic search — learns from your work"
     },
     "mempalace": {
       "command": "mempalace",
       "args": ["mcp"],
-      "description": "Conversation history memory - 96.6% recall accuracy (Claude Code only)"
+      "description": "Conversation history memory — 96.6% recall accuracy (Claude Code only)"
+    },
+    "repomix": {
+      "command": "repomix",
+      "args": ["--mcp"],
+      "description": "Full codebase context packaging — 80% token reduction"
+    },
+    "mcp-ragex": {
+      "command": "python",
+      "args": ["-m", "mcp_ragex"],
+      "description": "Hybrid code search: RAG (vector) + AST (tree-sitter) + regex (ripgrep)"
+    },
+    "fetch": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-fetch"],
+      "description": "Fetch any URL, converts HTML to clean Markdown for AI consumption"
+    },
+    "playwright": {
+      "command": "npx",
+      "args": ["@playwright/mcp@latest"],
+      "description": "Full browser automation: navigate, click, fill, screenshot (Microsoft)"
+    },
+    "brave-search": {
+      "command": "npx",
+      "args": ["-y", "@brave/mcp-server"],
+      "env": {
+        "BRAVE_API_KEY": "YOUR_BRAVE_API_KEY"
+      },
+      "description": "Web, image, news, and local search via Brave Search API"
+    },
+    "filesystem": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "."],
+      "description": "Sandboxed file system access — read, write, search, metadata"
+    },
+    "desktop-commander": {
+      "command": "npx",
+      "args": ["-y", "@wonderwhy-er/desktop-commander"],
+      "description": "All-in-one: file ops + diff editing + terminal control + process mgmt"
+    },
+    "sqlite": {
+      "command": "uvx",
+      "args": ["mcp-server-sqlite", "--db-path", "./data.db"],
+      "description": "SQLite database access — full CRUD, schema inspection"
+    },
+    "postgres": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-postgres", "postgresql://localhost/mydb"],
+      "description": "PostgreSQL read-only access with schema introspection"
+    },
+    "git": {
+      "command": "uvx",
+      "args": ["mcp-server-git"],
+      "description": "Local git operations: commit history, diffs, branches, blame"
+    },
+    "mcp-shell-server": {
+      "command": "python",
+      "args": ["-m", "mcp_shell_server"],
+      "env": {
+        "ALLOW_COMMANDS": "ls,cat,grep,find,git,npm,python,node,echo,pwd"
+      },
+      "description": "Secure shell execution — only whitelisted commands allowed"
+    },
+    "screenshot": {
+      "command": "python",
+      "args": ["-m", "screenshot_mcp_server"],
+      "description": "Screen capture and content processing for AI analysis"
+    },
+    "secrets-vault": {
+      "command": "python",
+      "args": ["-m", "mcp_secrets_vault"],
+      "description": "Local mini-vault — AI calls APIs without ever seeing your keys"
+    },
+    "hermes": {
+      "command": "hermes",
+      "args": ["mcp", "serve"],
+      "description": "Self-improving agent — exposes messaging and conversation tools"
     }
   }
 }

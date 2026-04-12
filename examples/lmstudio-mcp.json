@@ -2,26 +2,31 @@
   "mcpServers": {
     "agentmemory": {
       "command": "npx",
-      "args": ["-y", "@agentmemory/agentmemory"],
-      "description": "Universal memory for all AI tools"
+      "args": ["-y", "@agentmemory/agentmemory"]
     },
     "basic-memory": {
       "command": "uvx",
-      "args": ["basic-memory", "mcp"],
-      "description": "Human-readable knowledge graph"
-    },
-    "hindsight": {
-      "command": "hindsight-server",
-      "env": {
-        "HINDSIGHT_API_LLM_PROVIDER": "custom",
-        "HINDSIGHT_API_LLM_BASE_URL": "http://localhost:1234/v1"
-      },
-      "description": "Knowledge graph with semantic search"
+      "args": ["basic-memory", "mcp"]
     },
     "repomix": {
       "command": "repomix",
-      "args": ["--mcp"],
-      "description": "Full codebase context packaging"
+      "args": ["--mcp"]
+    },
+    "fetch": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-fetch"]
+    },
+    "filesystem": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "."]
+    },
+    "sqlite": {
+      "command": "uvx",
+      "args": ["mcp-server-sqlite", "--db-path", "./data.db"]
+    },
+    "git": {
+      "command": "uvx",
+      "args": ["mcp-server-git"]
     }
   }
 }

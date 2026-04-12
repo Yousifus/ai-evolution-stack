@@ -3,29 +3,94 @@
     "agentmemory": {
       "command": "npx",
       "args": ["-y", "@agentmemory/agentmemory"],
-      "description": "Universal memory for all AI tools - 43 MCP tools"
+      "description": "Universal memory for all AI tools"
     },
     "basic-memory": {
       "command": "uvx",
       "args": ["basic-memory", "mcp"],
-      "description": "Human-readable knowledge graph stored as Markdown"
+      "description": "Human-readable knowledge graph"
     },
     "hindsight": {
       "command": "hindsight-server",
-      "env": {
-        "HINDSIGHT_API_LLM_PROVIDER": "ollama"
-      },
+      "env": { "HINDSIGHT_API_LLM_PROVIDER": "ollama" },
       "description": "Knowledge graph with semantic search"
+    },
+    "mempalace": {
+      "command": "mempalace",
+      "args": ["mcp"],
+      "description": "Conversation history memory (Claude Code only)"
     },
     "repomix": {
       "command": "repomix",
       "args": ["--mcp"],
       "description": "Full codebase context packaging"
     },
-    "mempalace": {
-      "command": "mempalace",
-      "args": ["mcp"],
-      "description": "Conversation history memory (Claude Code only)"
+    "mcp-ragex": {
+      "command": "python",
+      "args": ["-m", "mcp_ragex"],
+      "description": "Hybrid code search: RAG + AST + regex"
+    },
+    "fetch": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-fetch"],
+      "description": "Fetch URLs, convert HTML to Markdown"
+    },
+    "playwright": {
+      "command": "npx",
+      "args": ["@playwright/mcp@latest"],
+      "description": "Browser automation (Microsoft)"
+    },
+    "brave-search": {
+      "command": "npx",
+      "args": ["-y", "@brave/mcp-server"],
+      "env": { "BRAVE_API_KEY": "YOUR_KEY" },
+      "description": "Web search via Brave API"
+    },
+    "filesystem": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "."],
+      "description": "Sandboxed file system access"
+    },
+    "desktop-commander": {
+      "command": "npx",
+      "args": ["-y", "@wonderwhy-er/desktop-commander"],
+      "description": "File ops + terminal + process management"
+    },
+    "sqlite": {
+      "command": "uvx",
+      "args": ["mcp-server-sqlite", "--db-path", "./data.db"],
+      "description": "SQLite database access"
+    },
+    "postgres": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-postgres", "postgresql://localhost/mydb"],
+      "description": "PostgreSQL read-only access"
+    },
+    "git": {
+      "command": "uvx",
+      "args": ["mcp-server-git"],
+      "description": "Local git operations"
+    },
+    "mcp-shell-server": {
+      "command": "python",
+      "args": ["-m", "mcp_shell_server"],
+      "env": { "ALLOW_COMMANDS": "ls,cat,grep,find,git,npm,python,node,echo,pwd" },
+      "description": "Secure whitelisted shell execution"
+    },
+    "screenshot": {
+      "command": "python",
+      "args": ["-m", "screenshot_mcp_server"],
+      "description": "Screen capture for AI analysis"
+    },
+    "secrets-vault": {
+      "command": "python",
+      "args": ["-m", "mcp_secrets_vault"],
+      "description": "Local mini-vault — AI never sees your keys"
+    },
+    "hermes": {
+      "command": "hermes",
+      "args": ["mcp", "serve"],
+      "description": "Self-improving agent (NousResearch)"
     }
   }
 }

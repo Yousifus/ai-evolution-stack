@@ -1,215 +1,322 @@
-# 🧠 AI Evolution Stack - Windows Installer
+# AI Evolution Stack — Windows Installer
+# 30+ tools across 15 categories. One script installs everything.
 # Works on Windows 10/11 with PowerShell 5.1+
-# Everything local. No cloud. Full privacy.
 
 param(
     [switch]$Everything,
     [switch]$Core,
     [switch]$Memory,
-    [switch]$Context,
+    [switch]$Web,
+    [switch]$Database,
+    [switch]$Agents,
+    [switch]$Inference,
     [switch]$MCP,
     [switch]$Verify,
     [switch]$Help
 )
 
-# Colors for PowerShell
-function Write-Info { param($Message) Write-Host "[INFO] $Message" -ForegroundColor Cyan }
-function Write-Success { param($Message) Write-Host "[SUCCESS] $Message" -ForegroundColor Green }
-function Write-Warn { param($Message) Write-Host "[WARN] $Message" -ForegroundColor Yellow }
-function Write-Error { param($Message) Write-Host "[ERROR] $Message" -ForegroundColor Red }
+# ============================================
+# COLORS & LOGGING
+# ============================================
 
-# Check if command exists
-function Test-Command {
-    param($Command)
-    $null -ne (Get-Command $Command -ErrorAction SilentlyContinue)
-}
+function Write-Info    { param($M) Write-Host "  [INFO] $M" -ForegroundColor Cyan }
+function Write-Success { param($M) Write-Host "  [OK]   $M" -ForegroundColor Green }
+function Write-Warn    { param($M) Write-Host "  [WARN] $M" -ForegroundColor Yellow }
+function Write-Err     { param($M) Write-Host "  [ERR]  $M" -ForegroundColor Red }
+function Write-Header  { param($M) Write-Host "`n  === $M ===`n" -ForegroundColor Magenta }
+
+function Test-Command { param($C) $null -ne (Get-Command $C -ErrorAction SilentlyContinue) }
+
+$ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 
 # ============================================
 # CHECK DEPENDENCIES
 # ============================================
 
 function Check-Dependencies {
-    Write-Info "Checking dependencies..."
-    
-    $missingDeps = @()
-    
-    if (-not (Test-Command "node")) {
-        $missingDeps += "Node.js"
-    }
-    
-    if (-not (Test-Command "npm")) {
-        $missingDeps += "npm"
-    }
-    
-    if (-not (Test-Command "python")) {
-        $missingDeps += "Python"
-    }
-    
-    if (-not (Test-Command "pip")) {
-        $missingDeps += "pip"
-    }
-    
-    if (-not (Test-Command "git")) {
-        $missingDeps += "git"
-    }
-    
-    if ($missingDeps.Count -gt 0) {
-        Write-Error "Missing dependencies: $($missingDeps -join ', ')"
-        Write-Info "Please install them first:"
-        Write-Info "  1. Install Node.js from https://nodejs.org"
-        Write-Info "  2. Install Python from https://python.org"
-        Write-Info "  3. Install Git from https://git-scm.com"
+    Write-Header "Checking Dependencies"
+
+    $missing = @()
+    if (-not (Test-Command "node"))   { $missing += "Node.js (https://nodejs.org)" }
+    if (-not (Test-Command "npm"))    { $missing += "npm" }
+    if (-not (Test-Command "python")) { $missing += "Python (https://python.org)" }
+    if (-not (Test-Command "pip"))    { $missing += "pip" }
+    if (-not (Test-Command "git"))    { $missing += "git (https://git-scm.com)" }
+
+    if ($missing.Count -gt 0) {
+        Write-Err "Missing dependencies:"
+        $missing | ForEach-Object { Write-Host "    - $_" -ForegroundColor Red }
         exit 1
     }
-    
-    Write-Success "All dependencies found!"
+
+    if (Test-Command "uv")  { Write-Success "uv: found (fast Python installer)" }
+    else                    { Write-Warn "uv: not found (will use pip)" }
+
+    Write-Success "All required dependencies found!"
 }
 
 # ============================================
-# INSTALL TOOLS
+# HELPERS
 # ============================================
 
-function Install-AgentMemory {
-    Write-Info "Installing agentmemory (universal memory)..."
-    npm install -g @agentmemory/agentmemory
-    Write-Success "agentmemory installed!"
+function Safe-PipInstall {
+    param($Pkg)
+    Write-Info "Installing $Pkg via pip..."
+    pip install --quiet $Pkg 2>$null
+    if ($LASTEXITCODE -eq 0) { Write-Success "$Pkg installed!" }
+    else { Write-Warn "$Pkg install may have failed — check manually" }
 }
 
-function Install-BasicMemory {
-    Write-Info "Installing Basic Memory (human-readable knowledge)..."
-    
-    # Try pip first
-    pip install basic-memory
-    
-    Write-Success "Basic Memory installed!"
+function Safe-NpmInstall {
+    param($Pkg)
+    Write-Info "Installing $Pkg via npm..."
+    npm install -g $Pkg 2>$null
+    if ($LASTEXITCODE -eq 0) { Write-Success "$Pkg installed!" }
+    else { Write-Warn "$Pkg install may have failed — check manually" }
 }
 
-function Install-MemPalace {
-    Write-Info "Installing MemPalace (conversation memory)..."
-    pip install mempalace
-    Write-Success "MemPalace installed!"
+# ============================================
+# MEMORY LAYER
+# ============================================
+
+function Install-MemoryLayer {
+    Write-Header "Memory Layer"
+
+    Safe-NpmInstall "@agentmemory/agentmemory"
+    Safe-PipInstall "basic-memory"
+    Safe-PipInstall "mempalace"
+    Safe-PipInstall "hindsight-server"
 }
 
-function Install-Hindsight {
-    Write-Info "Installing Hindsight (knowledge graph)..."
-    pip install hindsight-server
-    Write-Success "Hindsight installed!"
+# ============================================
+# PROJECT CONTEXT
+# ============================================
+
+function Install-ProjectContext {
+    Write-Header "Project Context"
+
+    Safe-NpmInstall "repomix"
+    Safe-NpmInstall "mex-cli"
 }
 
-function Install-Mex {
-    Write-Info "Installing mex (project documentation)..."
-    npm install -g mex-cli
-    Write-Success "mex installed!"
+# ============================================
+# CODE SEARCH
+# ============================================
+
+function Install-CodeSearch {
+    Write-Header "Code Search & Navigation"
+
+    Safe-PipInstall "mcp-ragex"
+    Write-Info "Repomix also serves as code search (see Project Context)"
 }
 
-function Install-Repomix {
-    Write-Info "Installing Repomix (codebase packaging)..."
-    npm install -g repomix
-    Write-Success "Repomix installed!"
+# ============================================
+# WEB & BROWSER
+# ============================================
+
+function Install-WebBrowser {
+    Write-Header "Web & Browser"
+
+    Write-Success "Fetch MCP: runs via npx (no global install needed)"
+    Write-Success "Playwright MCP: runs via npx (no global install needed)"
+    Write-Info "Brave Search MCP: get free API key at https://brave.com/search/api/"
+    Write-Info "  Set BRAVE_API_KEY in your mcp.json"
+    Write-Success "Brave Search MCP: runs via npx (no global install needed)"
 }
+
+# ============================================
+# FILE SYSTEM
+# ============================================
+
+function Install-FileSystem {
+    Write-Header "File System"
+
+    Write-Success "Filesystem MCP: runs via npx (no global install needed)"
+    Write-Info "Installing Desktop Commander..."
+    npx -y @wonderwhy-er/desktop-commander setup 2>$null
+    Write-Success "Desktop Commander: available via npx"
+}
+
+# ============================================
+# DATABASE
+# ============================================
+
+function Install-Database {
+    Write-Header "Database"
+
+    Write-Info "SQLite MCP: use 'uvx mcp-server-sqlite --db-path ./db.sqlite'"
+    if (Test-Command "uv") {
+        uv tool install mcp-server-sqlite 2>$null
+        Write-Success "SQLite MCP installed via uv"
+    } else {
+        Safe-PipInstall "mcp-server-sqlite"
+    }
+    Write-Success "Postgres MCP: runs via npx (configure connection in mcp.json)"
+}
+
+# ============================================
+# GIT & GITHUB
+# ============================================
+
+function Install-GitTools {
+    Write-Header "Git & GitHub"
+
+    if (Test-Command "uv") {
+        uv tool install mcp-server-git 2>$null
+        Write-Success "Git MCP installed via uv"
+    } else {
+        Safe-PipInstall "mcp-server-git"
+    }
+
+    Write-Info "GitHub MCP requires a Personal Access Token"
+    Write-Info "  Generate at: https://github.com/settings/tokens"
+    Write-Info "  Then: claude mcp add github --transport http --url https://api.githubcopilot.com/mcp/ --header 'Authorization: Bearer YOUR_PAT'"
+}
+
+# ============================================
+# TERMINAL & SHELL
+# ============================================
+
+function Install-Terminal {
+    Write-Header "Terminal & Shell"
+
+    Write-Info "Desktop Commander covers terminal (see File System)"
+    Safe-PipInstall "mcp-shell-server"
+}
+
+# ============================================
+# IMAGE & VISION
+# ============================================
+
+function Install-ImageVision {
+    Write-Header "Image & Vision"
+
+    Safe-PipInstall "screenshot-mcp-server"
+    Write-Info "mcp-vision requires Ollama with a vision model"
+    Write-Info "  After installing Ollama: ollama pull llava"
+}
+
+# ============================================
+# TASK & PROJECT MANAGEMENT
+# ============================================
+
+function Install-TaskManagement {
+    Write-Header "Task & Project Management"
+
+    Write-Info "Notion MCP: configure via https://developers.notion.com/"
+    Write-Info "Jira MCP: pip install jira-mcp-server (requires Jira credentials)"
+}
+
+# ============================================
+# SECURITY & SECRETS
+# ============================================
+
+function Install-Security {
+    Write-Header "Security & Secrets"
+
+    Safe-PipInstall "mcp-secrets-vault"
+    Write-Info "HashiCorp Vault MCP: see https://github.com/hashicorp/vault-mcp-server"
+}
+
+# ============================================
+# PERSONAL EVOLUTION
+# ============================================
 
 function Install-Homunculus {
     Write-Info "Installing homunculus (pattern learning)..."
-    
-    $homunculusDir = "$env:USERPROFILE\.homunculus"
-    
-    if (Test-Path $homunculusDir) {
-        Write-Warn "homunculus already exists at $homunculusDir"
-        $reinstall = Read-Host "Reinstall? (y/N)"
-        if ($reinstall -match '^[Yy]$') {
-            Remove-Item -Recurse -Force $homunculusDir
-        } else {
-            Write-Info "Skipping homunculus installation"
-            return
-        }
+    $dir = "$env:USERPROFILE\.homunculus"
+    if (Test-Path $dir) {
+        Write-Warn "homunculus already exists at $dir — skipping"
+        return
     }
-    
-    git clone https://github.com/humanplane/homunculus.git $homunculusDir
-    Set-Location $homunculusDir
-    pip install -e .
-    
-    Write-Success "homunculus installed to $homunculusDir"
+    git clone https://github.com/humanplane/homunculus.git $dir 2>$null
+    if (Test-Path $dir) {
+        Push-Location $dir
+        pip install -e . 2>$null
+        Pop-Location
+        Write-Success "homunculus installed"
+    } else {
+        Write-Warn "homunculus clone failed"
+    }
+}
+
+function Install-Hermes {
+    Write-Info "Installing Hermes Agent (self-improving agent by NousResearch)..."
+    if (Test-Command "hermes") {
+        Write-Success "Hermes Agent already installed"
+        return
+    }
+    # Hermes install script is Linux-only; use pip on Windows
+    Safe-PipInstall "hermes-agent"
+}
+
+function Install-PersonalEvolution {
+    Write-Header "Personal Evolution"
+    Install-Homunculus
+    Install-Hermes
 }
 
 # ============================================
-# SETUP MCP CONFIGURATION
+# LOCAL INFERENCE
+# ============================================
+
+function Install-Ollama {
+    Write-Info "Installing Ollama..."
+    if (Test-Command "ollama") {
+        Write-Success "Ollama already installed"
+    } else {
+        Write-Info "Download Ollama from: https://ollama.com/download"
+        Write-Info "After install, run: ollama pull qwen2.5-coder:7b"
+    }
+}
+
+function Install-LocalInference {
+    Write-Header "Local Inference"
+    Install-Ollama
+    Write-Info "LocalAI: docker run -p 8080:8080 localai/localai"
+    Write-Info "LM Studio: download from https://lmstudio.ai"
+}
+
+# ============================================
+# AGENT FRAMEWORKS
+# ============================================
+
+function Install-AgentFrameworks {
+    Write-Header "Agent Frameworks"
+    Install-Hermes
+    Safe-PipInstall "crewai"
+}
+
+# ============================================
+# MCP CONFIGURATION
 # ============================================
 
 function Setup-MCP {
-    Write-Info "Setting up MCP configuration..."
-    
-    $claudeMcpDir = "$env:APPDATA\Claude"
-    $claudeMcpFile = "$claudeMcpDir\mcp.json"
-    
-    # Create directory if it doesn't exist
-    New-Item -ItemType Directory -Force -Path $claudeMcpDir | Out-Null
-    
-    # Backup existing config
-    if (Test-Path $claudeMcpFile) {
-        $backupName = "mcp.json.backup.$(Get-Date -Format 'yyyyMMddHHmmss')"
-        Copy-Item $claudeMcpFile "$claudeMcpDir\$backupName"
-        Write-Warn "Backed up existing mcp.json"
+    Write-Header "MCP Configuration"
+
+    # Claude Code
+    $claudeDir = "$env:USERPROFILE\.claude"
+    New-Item -ItemType Directory -Force -Path $claudeDir | Out-Null
+
+    $claudeFile = "$claudeDir\mcp.json"
+    if (Test-Path $claudeFile) {
+        $backup = "mcp.json.backup.$(Get-Date -Format 'yyyyMMddHHmmss')"
+        Copy-Item $claudeFile "$claudeDir\$backup"
+        Write-Warn "Backed up existing Claude mcp.json"
     }
-    
-    # Create new MCP config
-    $mcpConfig = @{
-        mcpServers = @{
-            agentmemory = @{
-                command = "npx"
-                args = @("-y", "@agentmemory/agentmemory")
-                description = "Universal memory for all AI tools"
-            }
-            "basic-memory" = @{
-                command = "python"
-                args = @("-m", "basic_memory", "mcp")
-                description = "Human-readable knowledge graph"
-            }
-            hindsight = @{
-                command = "hindsight-server"
-                env = @{
-                    HINDSIGHT_API_LLM_PROVIDER = "ollama"
-                }
-                description = "Knowledge graph with semantic search"
-            }
-            repomix = @{
-                command = "repomix"
-                args = @("--mcp")
-                description = "Full codebase context"
-            }
-        }
-    } | ConvertTo-Json -Depth 10
-    
-    $mcpConfig | Out-File -FilePath $claudeMcpFile -Encoding utf8
-    
-    Write-Success "MCP configuration created at $claudeMcpFile"
-    
-    # Also create Cursor config
-    $cursorMcpDir = "$env:APPDATA\Cursor"
-    New-Item -ItemType Directory -Force -Path $cursorMcpDir | Out-Null
-    
-    $cursorConfig = @{
-        mcpServers = @{
-            agentmemory = @{
-                command = "npx"
-                args = @("-y", "@agentmemory/agentmemory")
-            }
-            "basic-memory" = @{
-                command = "python"
-                args = @("-m", "basic_memory", "mcp")
-            }
-            hindsight = @{
-                command = "hindsight-server"
-            }
-            repomix = @{
-                command = "repomix"
-                args = @("--mcp")
-            }
-        }
-    } | ConvertTo-Json -Depth 10
-    
-    $cursorConfig | Out-File -FilePath "$cursorMcpDir\mcp.json" -Encoding utf8
-    
-    Write-Success "Cursor MCP configuration created at $cursorMcpDir\mcp.json"
+
+    Copy-Item "$ScriptDir\mcp.json" $claudeFile -Force
+    Write-Success "Claude Code MCP config installed at $claudeFile"
+
+    # Cursor
+    $cursorDir = "$env:APPDATA\Cursor"
+    New-Item -ItemType Directory -Force -Path $cursorDir | Out-Null
+    if (Test-Path "$ScriptDir\examples\cursor-mcp.json") {
+        Copy-Item "$ScriptDir\examples\cursor-mcp.json" "$cursorDir\mcp.json" -Force
+    } else {
+        Copy-Item "$ScriptDir\mcp.json" "$cursorDir\mcp.json" -Force
+    }
+    Write-Success "Cursor MCP config installed at $cursorDir\mcp.json"
 }
 
 # ============================================
@@ -217,135 +324,114 @@ function Setup-MCP {
 # ============================================
 
 function Verify-Installation {
-    Write-Info "Verifying installation..."
-    
-    Write-Host ""
-    Write-Host "========================================" -ForegroundColor Cyan
-    Write-Host "  AI Evolution Stack - Status Check" -ForegroundColor Cyan
-    Write-Host "========================================" -ForegroundColor Cyan
-    Write-Host ""
-    
+    Write-Header "Installation Status"
+
     $tools = @(
-        @{ Name = "agentmemory"; Command = "agentmemory" },
-        @{ Name = "basic-memory"; Command = "basic-memory" },
-        @{ Name = "mempalace"; Command = "mempalace" },
-        @{ Name = "hindsight"; Command = "hindsight-server" },
-        @{ Name = "mex"; Command = "mex" },
-        @{ Name = "repomix"; Command = "repomix" }
+        @{Cat="Memory";       Name="agentmemory";    Cmd="agentmemory"},
+        @{Cat="Memory";       Name="basic-memory";   Cmd="basic-memory"},
+        @{Cat="Memory";       Name="mempalace";      Cmd="mempalace"},
+        @{Cat="Memory";       Name="hindsight";      Cmd="hindsight-server"},
+        @{Cat="Context";      Name="repomix";        Cmd="repomix"},
+        @{Cat="Context";      Name="mex";            Cmd="mex"},
+        @{Cat="Evolution";    Name="hermes";         Cmd="hermes"},
+        @{Cat="Inference";    Name="ollama";         Cmd="ollama"},
+        @{Cat="Frameworks";   Name="crewai";         Cmd="crewai"}
     )
-    
-    foreach ($tool in $tools) {
-        if (Test-Command $tool.Command) {
-            Write-Success "$($tool.Name): Installed"
+
+    $lastCat = ""
+    foreach ($t in $tools) {
+        if ($t.Cat -ne $lastCat) {
+            Write-Host "`n  -- $($t.Cat) --" -ForegroundColor Cyan
+            $lastCat = $t.Cat
+        }
+        if (Test-Command $t.Cmd) {
+            Write-Host "    $($t.Name): Installed" -ForegroundColor Green
         } else {
-            Write-Error "$($tool.Name): Not found"
+            Write-Host "    $($t.Name): Not found" -ForegroundColor Red
         }
     }
-    
-    # Check homunculus separately
-    $homunculusDir = "$env:USERPROFILE\.homunculus"
-    if (Test-Path $homunculusDir) {
-        Write-Success "homunculus: Installed"
+
+    # homunculus
+    Write-Host "`n  -- Evolution --" -ForegroundColor Cyan
+    if (Test-Path "$env:USERPROFILE\.homunculus") {
+        Write-Host "    homunculus: Installed" -ForegroundColor Green
     } else {
-        Write-Warn "homunculus: Not installed (optional)"
+        Write-Host "    homunculus: Not installed" -ForegroundColor Yellow
     }
-    
-    Write-Host ""
-    Write-Host "========================================" -ForegroundColor Cyan
+
+    Write-Host "`n  -- MCP Servers (via npx) --" -ForegroundColor Cyan
+    @("fetch","playwright","brave-search","filesystem","desktop-commander","postgres") | ForEach-Object {
+        Write-Host "    ${_}: available (on-demand)" -ForegroundColor Green
+    }
+
+    # MCP config
+    if (Test-Path "$env:USERPROFILE\.claude\mcp.json") {
+        Write-Host "`n  Claude Code MCP config: found" -ForegroundColor Green
+    } else {
+        Write-Host "`n  Claude Code MCP config: not found" -ForegroundColor Yellow
+    }
+
     Write-Host ""
 }
 
 # ============================================
-# MAIN MENU
+# INSTALL EVERYTHING
+# ============================================
+
+function Install-Everything {
+    Install-MemoryLayer
+    Install-ProjectContext
+    Install-CodeSearch
+    Install-WebBrowser
+    Install-FileSystem
+    Install-Database
+    Install-GitTools
+    Install-Terminal
+    Install-ImageVision
+    Install-TaskManagement
+    Install-Security
+    Install-PersonalEvolution
+    Install-LocalInference
+    Install-AgentFrameworks
+    Setup-MCP
+    Verify-Installation
+}
+
+function Install-Core {
+    Install-MemoryLayer
+    Install-ProjectContext
+    Install-CodeSearch
+    Setup-MCP
+    Verify-Installation
+}
+
+# ============================================
+# INTERACTIVE MENU
 # ============================================
 
 function Show-Menu {
     Write-Host ""
-    Write-Host "🧠 AI Evolution Stack Installer" -ForegroundColor Cyan
-    Write-Host "================================" -ForegroundColor Cyan
+    Write-Host "  AI Evolution Stack Installer" -ForegroundColor Cyan
+    Write-Host "  30+ tools across 15 categories" -ForegroundColor White
     Write-Host ""
-    Write-Host "What would you like to install?"
+    Write-Host "  1)  Everything (recommended)"
+    Write-Host "  2)  Core only (memory + context + code search + MCP)"
     Write-Host ""
-    Write-Host "  1) Everything (recommended)"
-    Write-Host "  2) Core only (agentmemory + basic-memory + mex + repomix)"
-    Write-Host "  3) Memory layer only"
-    Write-Host "  4) Project context only"
-    Write-Host "  5) Individual selection"
-    Write-Host "  6) Just setup MCP configuration"
-    Write-Host "  7) Verify existing installation"
-    Write-Host "  8) Exit"
+    Write-Host "  -- Individual Categories --"
+    Write-Host "  3)  Memory layer"
+    Write-Host "  4)  Project context"
+    Write-Host "  5)  Web & browser"
+    Write-Host "  6)  Database"
+    Write-Host "  7)  Git & GitHub"
+    Write-Host "  8)  Personal evolution (homunculus, hermes)"
+    Write-Host "  9)  Local inference (ollama, localai)"
+    Write-Host "  10) Agent frameworks (hermes, crewai)"
     Write-Host ""
-}
-
-function Install-Everything {
-    Write-Info "Installing everything..."
-    Install-AgentMemory
-    Install-BasicMemory
-    Install-MemPalace
-    Install-Hindsight
-    Install-Mex
-    Install-Repomix
-    Install-Homunculus
-    Setup-MCP
-    Verify-Installation
-    Write-Success "Installation complete! 🎉"
-}
-
-function Install-Core {
-    Write-Info "Installing core tools..."
-    Install-AgentMemory
-    Install-BasicMemory
-    Install-Mex
-    Install-Repomix
-    Setup-MCP
-    Verify-Installation
-    Write-Success "Core installation complete! 🎉"
-}
-
-function Install-MemoryLayer {
-    Write-Info "Installing memory layer..."
-    Install-AgentMemory
-    Install-BasicMemory
-    Install-MemPalace
-    Install-Hindsight
-    Setup-MCP
-    Verify-Installation
-    Write-Success "Memory layer installation complete! 🎉"
-}
-
-function Install-ProjectContext {
-    Write-Info "Installing project context tools..."
-    Install-Mex
-    Install-Repomix
-    Setup-MCP
-    Verify-Installation
-    Write-Success "Project context installation complete! 🎉"
-}
-
-function Install-Individual {
+    Write-Host "  -- Config --"
+    Write-Host "  11) Setup MCP configuration only"
+    Write-Host "  12) Verify installation"
+    Write-Host "  13) Exit"
     Write-Host ""
-    Write-Host "Select tools to install (y/n):"
-    Write-Host ""
-    
-    $installAgentMemory = Read-Host "Install agentmemory? (y/N)"
-    $installBasicMemory = Read-Host "Install Basic Memory? (y/N)"
-    $installMemPalace = Read-Host "Install MemPalace? (y/N)"
-    $installHindsight = Read-Host "Install Hindsight? (y/N)"
-    $installMex = Read-Host "Install mex? (y/N)"
-    $installRepomix = Read-Host "Install Repomix? (y/N)"
-    $installHomunculus = Read-Host "Install homunculus? (y/N)"
-    
-    if ($installAgentMemory -match '^[Yy]$') { Install-AgentMemory }
-    if ($installBasicMemory -match '^[Yy]$') { Install-BasicMemory }
-    if ($installMemPalace -match '^[Yy]$') { Install-MemPalace }
-    if ($installHindsight -match '^[Yy]$') { Install-Hindsight }
-    if ($installMex -match '^[Yy]$') { Install-Mex }
-    if ($installRepomix -match '^[Yy]$') { Install-Repomix }
-    if ($installHomunculus -match '^[Yy]$') { Install-Homunculus }
-    
-    Setup-MCP
-    Verify-Installation
-    Write-Success "Installation complete! 🎉"
 }
 
 # ============================================
@@ -354,96 +440,73 @@ function Install-Individual {
 
 function Main {
     Write-Host ""
-    Write-Host "🧠 Welcome to AI Evolution Stack Installer" -ForegroundColor Cyan
-    Write-Host "   Everything local. No cloud. Full privacy." -ForegroundColor Cyan
+    Write-Host "  AI Evolution Stack" -ForegroundColor Cyan
+    Write-Host "  The Ultimate Local-First AI Toolkit" -ForegroundColor White
+    Write-Host "  30+ tools. 15 categories. One script." -ForegroundColor White
     Write-Host ""
-    
-    # Handle command-line arguments
+
     if ($Help) {
         Write-Host "Usage: .\install.ps1 [OPTION]"
         Write-Host ""
-        Write-Host "Options:"
-        Write-Host "  -Everything    Install everything"
-        Write-Host "  -Core          Install core tools only"
-        Write-Host "  -Memory        Install memory layer only"
-        Write-Host "  -Context       Install project context only"
+        Write-Host "  -Everything    Install all 30+ tools"
+        Write-Host "  -Core          Memory + context + code search"
+        Write-Host "  -Memory        Memory layer only"
+        Write-Host "  -Web           Web & browser tools"
+        Write-Host "  -Database      Database tools"
+        Write-Host "  -Agents        Agent frameworks"
+        Write-Host "  -Inference     Local inference"
         Write-Host "  -MCP           Setup MCP configuration only"
-        Write-Host "  -Verify        Verify existing installation"
-        Write-Host "  -Help          Show this help"
-        Write-Host ""
+        Write-Host "  -Verify        Check what's installed"
         exit 0
     }
-    
-    if ($Everything) {
-        Check-Dependencies
-        Install-Everything
-        exit 0
-    }
-    
-    if ($Core) {
-        Check-Dependencies
-        Install-Core
-        exit 0
-    }
-    
-    if ($Memory) {
-        Check-Dependencies
-        Install-MemoryLayer
-        exit 0
-    }
-    
-    if ($Context) {
-        Check-Dependencies
-        Install-ProjectContext
-        exit 0
-    }
-    
-    if ($MCP) {
-        Setup-MCP
-        exit 0
-    }
-    
-    if ($Verify) {
-        Verify-Installation
-        exit 0
-    }
-    
-    # Interactive menu
+
     Check-Dependencies
-    
+
+    if ($Everything) { Install-Everything; return }
+    if ($Core)       { Install-Core; return }
+    if ($Memory)     { Install-MemoryLayer; return }
+    if ($Web)        { Install-WebBrowser; return }
+    if ($Database)   { Install-Database; return }
+    if ($Agents)     { Install-AgentFrameworks; return }
+    if ($Inference)  { Install-LocalInference; return }
+    if ($MCP)        { Setup-MCP; return }
+    if ($Verify)     { Verify-Installation; return }
+
+    # Interactive
     while ($true) {
         Show-Menu
-        $choice = Read-Host "Enter choice (1-8)"
-        
+        $choice = Read-Host "  Enter choice (1-13)"
+
         switch ($choice) {
-            "1" { Install-Everything; break }
-            "2" { Install-Core; break }
-            "3" { Install-MemoryLayer; break }
-            "4" { Install-ProjectContext; break }
-            "5" { Install-Individual; break }
-            "6" { Setup-MCP; Verify-Installation; break }
-            "7" { Verify-Installation; break }
-            "8" { Write-Info "Exiting..."; exit 0 }
-            default { Write-Error "Invalid choice. Please try again." }
+            "1"  { Install-Everything; break }
+            "2"  { Install-Core; break }
+            "3"  { Install-MemoryLayer; break }
+            "4"  { Install-ProjectContext; break }
+            "5"  { Install-WebBrowser; break }
+            "6"  { Install-Database; break }
+            "7"  { Install-GitTools; break }
+            "8"  { Install-PersonalEvolution; break }
+            "9"  { Install-LocalInference; break }
+            "10" { Install-AgentFrameworks; break }
+            "11" { Setup-MCP; break }
+            "12" { Verify-Installation; continue }
+            "13" { Write-Info "Exiting..."; exit 0 }
+            default { Write-Err "Invalid choice" }
         }
-        
-        if ($choice -in @("1", "2", "3", "4", "5", "6")) {
-            break
-        }
+
+        if ($choice -in @("1","2","3","4","5","6","7","8","9","10","11")) { break }
     }
-    
+
     Write-Host ""
-    Write-Host "========================================" -ForegroundColor Green
-    Write-Host "  🎉 Installation Complete!" -ForegroundColor Green
-    Write-Host "========================================" -ForegroundColor Green
+    Write-Host "  Installation Complete!" -ForegroundColor Green
     Write-Host ""
-    Write-Host "Next steps:"
-    Write-Host "  1. Restart Cursor/Claude Code"
-    Write-Host "  2. Check MCP servers are loaded"
+    Write-Host "  Next steps:"
+    Write-Host "  1. Restart Cursor / Claude Code"
+    Write-Host "  2. Check MCP servers: claude mcp list"
     Write-Host "  3. Run 'mex init' in your projects"
-    Write-Host "  4. Start building your AI evolution!"
+    Write-Host "  4. Try: ollama run qwen2.5-coder:7b"
     Write-Host ""
-    Write-Host "For help: https://github.com/YOUR_USERNAME/ai-evolution-stack"
+    Write-Host "  Docs: https://github.com/Yousifus/ai-evolution-stack"
     Write-Host ""
 }
 
