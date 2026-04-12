@@ -1,0 +1,19 @@
+{
+  "mcpServers": {
+    "agentmemory": {
+      "command": "npx",
+      "args": ["-y", "@agentmemory/agentmemory"]
+    },
+    "basic-memory": {
+      "command": "uvx",
+      "args": ["basic-memory", "mcp"]
+    },
+    "hindsight": {
+      "command": "hindsight-server"
+    },
+    "repomix": {
+      "command": "repomix",
+      "args": ["--mcp"]
+    }
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "mcpServers": {
+    "agentmemory": {
+      "command": "npx",
+      "args": ["-y", "@agentmemory/agentmemory"],
+      "description": "Universal memory for all AI tools - 43 MCP tools"
+    },
+    "basic-memory": {
+      "command": "uvx",
+      "args": ["basic-memory", "mcp"],
+      "description": "Human-readable knowledge graph stored as Markdown"
+    },
+    "hindsight": {
+      "command": "hindsight-server",
+      "env": {
+        "HINDSIGHT_API_LLM_PROVIDER": "ollama"
+      },
+      "description": "Knowledge graph with semantic search"
+    },
+    "repomix": {
+      "command": "repomix",
+      "args": ["--mcp"],
+      "description": "Full codebase context packaging"
+    },
+    "mempalace": {
+      "command": "mempalace",
+      "args": ["mcp"],
+      "description": "Conversation history memory (Claude Code only)"
+    }
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "mcpServers": {
+    "agentmemory": {
+      "command": "npx",
+      "args": ["-y", "@agentmemory/agentmemory"],
+      "description": "Universal memory for all AI tools"
+    },
+    "basic-memory": {
+      "command": "uvx",
+      "args": ["basic-memory", "mcp"],
+      "description": "Human-readable knowledge graph"
+    },
+    "hindsight": {
+      "command": "hindsight-server",
+      "env": {
+        "HINDSIGHT_API_LLM_PROVIDER": "custom",
+        "HINDSIGHT_API_LLM_BASE_URL": "http://localhost:1234/v1"
+      },
+      "description": "Knowledge graph with semantic search"
+    },
+    "repomix": {
+      "command": "repomix",
+      "args": ["--mcp"],
+      "description": "Full codebase context packaging"
+    }
+  }
+}
